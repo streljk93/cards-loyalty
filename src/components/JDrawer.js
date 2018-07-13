@@ -8,37 +8,15 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    Menu,
-    MenuItem,
-    Button,
     withStyles,
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
-import styles from './JDrawerStyles';
+import styles from '../styles/JDrawerStyles';
 
 class JDrawer extends React.Component {
 
-    state = {
-        mobileOpen: false,
-        open: false,
-        anchorEl: null,
-    };
-
-    handleClick = () => {
-        this.setState(state => ({ open: !state.open }));
-    };
-
-    handleDrawerToggle = () => {
-        this.setState(state => ({ mobileOpen: !state.mobileOpen }));
-    };
-
-    handleClick = event => {
-        this.setState({ anchorEl: event.currentTarget });
-    };
-
     render() {
         const { classes, theme } = this.props;
-        const { anchorEl } = this.state;
         const drawer = (
             <div>
                 <div className={classes.toolbar} style={{
@@ -49,19 +27,19 @@ class JDrawer extends React.Component {
                     color: theme.palette.primary.light,
                 }}>
                     <Typography
-                            className={classes.navTitle}
-                            variant='title'
-                            color='inherit'
-                            noWrap>
-                            JK 
-                            <Hidden>
-                                <Icons.CardGiftcard style={{
-                                    paddingRight: '10px',
-                                    paddingLeft: '10px',
-                                }} />
-                            </Hidden>
-                            Card
-                        </Typography>
+                        className={classes.navTitle}
+                        variant='title'
+                        color='inherit'
+                        noWrap>
+                        JK 
+                        <Hidden>
+                            <Icons.CardGiftcard style={{
+                                paddingRight: '10px',
+                                paddingLeft: '10px',
+                            }} />
+                        </Hidden>
+                        Card
+                    </Typography>
                 </div>
                 {this.props.menu.map((items, i1) => {
                     let blockMenu = [];
@@ -88,22 +66,6 @@ class JDrawer extends React.Component {
                         </div>
                     );
                 })}
-                <Button
-          aria-owns={anchorEl ? 'simple-menu' : null}
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
-          Open Menu
-        </Button>
-                 <Menu
-                    id="simple-menu"
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={() => console.log('ok menu')}>
-                    <MenuItem onClick={() => console.log('ok')}>Profile</MenuItem>
-                    <MenuItem onClick={() => console.log('ok')}>My account</MenuItem>
-                    <MenuItem onClick={() => console.log('ok')}>Logout</MenuItem>
-                </Menu>
             </div>
         );
         return (
@@ -111,8 +73,8 @@ class JDrawer extends React.Component {
                 <Hidden mdUp>
                     <Drawer
                         variant='temporary'
-                        open={this.state.mobileOpen}
-                        onClose={this.handleDrawerToggle}
+                        open={this.props.drawerIsOpen}
+                        onClose={this.props.onToggleDrawer}
                         classes={{
                             paper: classes.drawerPaper,
                         }}

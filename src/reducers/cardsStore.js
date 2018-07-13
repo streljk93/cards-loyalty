@@ -1,7 +1,7 @@
-const cardsPersonal = (state = [], action) => {
+const cardsStore = (state = [], action) => {
     switch (action.type) {
 
-        case 'ADD_CARD_PERSONAL':
+        case 'ADD_CARD_STORE':
             return [...state, {
                 ...action.payload,
             }];
@@ -12,4 +12,4 @@ const cardsPersonal = (state = [], action) => {
     }
 };
 
-export default cardsPersonal;
+export default cardsStore;

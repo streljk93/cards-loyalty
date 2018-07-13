@@ -8,7 +8,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
-import styles from './JHeaderStyles';
+import styles from '../styles/JHeaderStyles';
 
 class JHeader extends React.Component {
 
@@ -20,7 +20,7 @@ class JHeader extends React.Component {
                     <IconButton
                         color='inherit'
                         aria-label='open drawer'
-                        onClick={this.handleDrawerToggle}
+                        onClick={this.props.onToggleDrawer}
                         className={classes.navIconHide}>
                         <Icons.Menu />
                     </IconButton>
