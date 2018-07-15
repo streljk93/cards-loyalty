@@ -5,6 +5,7 @@ export function addUser() {
     return {
         type: 'ADD_USER',
         payload: {
+            id: uuid(),
             firstname: 'firstname',
             middlename: 'middlename',
             lastname: 'lastname',
@@ -14,8 +15,7 @@ export function addUser() {
             phone: null,
             lastlogin: moment().format('YYYY-MM-DD HH:mm:ss'),
             isactive: 0,
-            lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
-            uuid: uuid(),
+            lastupdated: null,
         },
     };
 }
