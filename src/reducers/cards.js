@@ -3,12 +3,14 @@ import moment from 'moment';
 
 const initialState = [{
     id: uuid(),
+    slug: 'bonus-card',
     image: 'https://tourisminchina.ru/app/uploads/2015/04/Gora-Dzhomolungma.jpg',
     qr: '',
     name: 'Бонусная карта',
     description: 'Позволяет потребителям копить баллы за совершенные в магазинах покупки, а также, при наличии достаточного количества баллов, расплачиваться ими наряду с деньгами',
 }, {
     id: uuid(),
+    slug: 'discount-card',
     image: 'http://rk.karelia.ru/wp-content/uploads/2016/05/More.jpg',
     qr: '',
     name: 'Дисконтная карта',

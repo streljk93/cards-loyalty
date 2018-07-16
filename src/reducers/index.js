@@ -3,7 +3,6 @@ import { routerReducer } from 'react-router-redux';
 import ui from './ui';
 import users from './users';
 import cards from './cards';
-import rulesStore from './rulesStore';
 import cardsStore from './cardsStore';
 import cardsPersonal from './cardsPersonal';
 
@@ -12,7 +11,6 @@ export default combineReducers({
     ui,
     users,
     cards,
-    rulesStore,
     cardsStore,
     cardsPersonal,
 });
