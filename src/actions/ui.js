@@ -18,3 +18,24 @@ export function toggleDrawer () {
         payload: null,
     };
 }
+
+export function addError ({ title, text }) {
+    return {
+        type: 'ADD_ERROR',
+        payload: {
+            title,
+            text,
+        },
+    };
+}
+
+export function AddGlobalMessage ({ lvl, title, text }) {
+    return {
+        type: 'ADD_GLOBAL_MESSAGE',
+        payload: {
+            lvl,
+            title,
+            text,
+        },
+    };
+}

@@ -14,7 +14,7 @@ const initialState = [{
     name: 'Списание с карты',
 }, {
     id: uuid(),
-    slug: 'card-replenishment'
+    slug: 'card-replenishment',
     name: 'Пополнение карты',
 }, {
     id: uuid(),

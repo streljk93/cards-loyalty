@@ -22,13 +22,13 @@ class JCardsStore extends React.Component {
                 {items.map((card, i) => {
                     return (
                         <JCardStore
-                            key={i}
+                            key={card.id}
                             image={card.image}
-                            qr={card.qr}
-                            title={card.title}
-                            content={card.content}
+                            qr={card.qrcode}
+                            title={card.name}
+                            content={card.description}
                             rules={card.rules}
-                            date={moment(card.date, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY')}
+                            date={moment(card.lastupdated, 'YYYY-MM-DD HH:mm:ss').format('DD MMM YYYY')}
                         />
                     );
                 })}

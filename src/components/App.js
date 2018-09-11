@@ -6,7 +6,7 @@ import styles from '../styles/AppStyles';
 // own components
 import JHeader from './JHeader';
 import JDrawer from './JDrawer';
-import JContentCardsStore from './JContentCardsStore';
+import JScreenCardsStore from '../containers/JScreenCardsStore';
 
 const menu = [[{
     icon: 'CreditCard',
@@ -40,8 +40,8 @@ class App extends React.Component {
                     <div className={classes.toolbar} />
                     <div className={classes.content}>
                         
-                        <Route exact path='/' component={JContentCardsStore} />
-                        <Route exact path='/cards' component={JContentCardsStore} />
+                        <Route exact path='/' component={JScreenCardsStore} />
+                        <Route exact path='/cards' component={JScreenCardsStore} />
 
                     </div>
                 </main>

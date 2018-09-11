@@ -1,11 +1,11 @@
 import uuid from 'uuid/v4';
-import moment from 'moment';
 
-export function addUser() {
+export function addUser({ site_id }) {
     return {
         type: 'ADD_USER',
         payload: {
             id: uuid(),
+            site_id,
             firstname: 'firstname',
             middlename: 'middlename',
             lastname: 'lastname',
@@ -13,9 +13,8 @@ export function addUser() {
             gender: null,
             email: null,
             phone: null,
-            lastlogin: moment().format('YYYY-MM-DD HH:mm:ss'),
-            isactive: 0,
-            lastupdated: null,
+            password: null,
+            lastlogin: null,
         },
     };
 }
