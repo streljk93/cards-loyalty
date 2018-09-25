@@ -1,4 +1,6 @@
+import config from '../config';
 import { addError } from './ui';
+import { checkExpiryDate } from "../libraries/helpers";
 
 function requestActionList () {
     return {
@@ -10,19 +12,21 @@ function responseActionList (actionList) {
     return {
         type: 'RESPONSE_ACTION_LIST',
         payload: actionList,
-        receivedAt: Date.now(),
     };
 }
 
 export function fetchActionList () {
-    return dispatch => {
+    return (dispatch, getState) => {
+
+        const { rule } = getState();
+        if (checkExpiryDate(rule.meta.updated)) return null;
 
         dispatch(requestActionList());
 
-        return fetch(`http://localhost:3005/loyality/card`)
+        return fetch(`${config}/rule/action`)
             .then(response => response.json())
             .then(data => dispatch(responseActionList(data.info)))
-            .catch(error => addError('Загрузка событий', error.message));
+            .catch(error => addError('Загрузка общих событий', error.message));
 
     };
 }

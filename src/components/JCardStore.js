@@ -8,8 +8,12 @@ import {
     CardActions,
     Button,
     Typography,
+    ExpansionPanel,
+    ExpansionPanelSummary,
+    ExpansionPanelDetails,
     withStyles,
 } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import * as Icons from '@material-ui/icons';
 import styles from '../styles/JCardStoreStyles';
 
@@ -43,9 +47,26 @@ class JCardStore extends React.Component {
                             <Typography gutterBottom variant="headline" component="h2">
                                 {title}
                             </Typography>
-                            <Typography color='textSecondary' style={{ height: '80px', overflowY: 'auto' }}>
+                            <Typography
+                                color='textSecondary'
+                                style={{ height: '80px', overflowY: 'auto' }}>
                                 {content}
                             </Typography>
+                            <div className={classes.expansions}>
+                                <ExpansionPanel>
+                                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                                        <Icons.Settings />
+                                        <Typography className={classes.expansionTitle}>
+                                            Правила...
+                                        </Typography>
+                                    </ExpansionPanelSummary>
+                                    <ExpansionPanelDetails>
+                                        <Typography color='textSecondary'>
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque debitis doloribus necessitatibus placeat! Accusantium, ad eligendi et eum iure porro quod saepe sit vitae. Alias aspernatur autem esse ipsum odit?
+                                        </Typography>
+                                    </ExpansionPanelDetails>
+                                </ExpansionPanel>
+                            </div>
                         </CardContent>
                         {rules && rules.length > 0 &&
                             <CardContent>
@@ -77,13 +98,21 @@ class JCardStore extends React.Component {
                     <CardActions>
                         <Grid container>
                             <Grid item xs={6}>
-                                <Button style={{ width: '100%', borderTopRightRadius: 0, borderBottomRightRadius: 0 }} variant='outlined' size='small' color='primary'>
+                                <Button
+                                    className={classes.cardActionLeft}
+                                    variant='outlined'
+                                    size='small'
+                                    color='primary'>
                                     <Icons.Edit />
                                     изменить
                                 </Button>
                             </Grid>
                             <Grid item xs={6}>
-                                <Button style={{ width: '100%', borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderLeftWidth: '0px' }} variant='outlined' size='small' color='secondary'>
+                                <Button
+                                    className={classes.cardActionRight}
+                                    variant='outlined'
+                                    size='small'
+                                    color='secondary'>
                                     <Icons.Delete />
                                     удалить
                                 </Button>

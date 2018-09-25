@@ -10,4 +10,23 @@ export default (theme) => ({
         paddingTop: '50%', // 16:9
         position: 'relative',
     },
+    expansions: {
+        marginTop: '20px',
+    },
+    expansionTitle: {
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: '5px',
+    },
+    cardActionLeft: {
+        width: '100%',
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+    },
+    cardActionRight: {
+        width: '100%',
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        borderLeftWidth: 0,
+    },
 });
