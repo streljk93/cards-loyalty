@@ -1,3 +1,4 @@
+// libraries
 import React from 'react';
 import {
     Typography,
@@ -11,6 +12,9 @@ import {
     withStyles,
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
+import { Link } from 'react-router-dom';
+
+// own components
 import styles from '../styles/JDrawerStyles';
 
 class JDrawer extends React.Component {
@@ -43,16 +47,18 @@ class JDrawer extends React.Component {
                 </div>
                 {this.props.menu.map((items, i1) => {
                     let blockMenu = [];
-                    items.map((item, i2) => {
+                    items.forEach((item, i2) => {
 
                         const IconList = Icons[item.icon];
                         blockMenu.push(
-                            <ListItem key={i1 + '' + i2} button>
-                                <ListItemIcon>
-                                    <IconList />
-                                </ListItemIcon>
-                                <ListItemText inset primary={item.title} />
-                            </ListItem>
+                            <Link key={i1 + '' + i2} to={item.href || '/'}>
+                                <ListItem button onClick={this.props.onToggleDrawer}>
+                                    <ListItemIcon>
+                                        <IconList />
+                                    </ListItemIcon>
+                                    <ListItemText inset primary={item.title} />
+                                </ListItem>
+                            </Link>
                         );
 
                     });

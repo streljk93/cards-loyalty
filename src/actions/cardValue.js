@@ -1,3 +1,5 @@
+import config from "../config";
+
 function requestCardValueList () {
     return {
         type: 'REQUEST_CARD_VALUE_LIST',
@@ -13,11 +15,18 @@ function receiveCardValueList (cardValueList) {
 }
 
 export function fetchCardValueList () {
-    return dispatch => {
+    return (dispatch, getState) => {
+
+        const { account } = getState();
 
         dispatch(requestCardValueList());
 
-        return fetch('http://localhost:3005/loyality/card')
+        return fetch(`${config.api}/loyality/card`, {
+            method: 'GET',
+            headers: {
+                'Authorization': account.token,
+            },
+        })
             .then(response => response.json())
             .then(data => receiveCardValueList(data.info));
 

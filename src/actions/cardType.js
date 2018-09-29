@@ -18,12 +18,17 @@ function responseCardTypeList (cardTypeList) {
 export function fetchCardTypeList () {
     return (dispatch, getState) => {
 
-        const { cardType } = getState();
-        if (checkExpiryDate(cardType.meta.updated)) return null;
+        const { cardType, account } = getState();
+        if (checkExpiryDate(cardType.meta.updated) && process.env.NODE_ENV === 'production') return null;
 
         dispatch(requestCardTypeList());
 
-        return fetch(`${config.api}/loyality/card-type`)
+        return fetch(`${config.api}/loyality/card-type`, {
+            method: 'GET',
+            headers: {
+                'Authorization': account.token,
+            },
+        })
             .then(response => response.json())
             .then(data => dispatch(responseCardTypeList(data.info)))
             .catch(error => addError('Загрузка карт', error.message));

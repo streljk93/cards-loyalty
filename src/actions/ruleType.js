@@ -18,12 +18,17 @@ function responseRuleTypeList (ruleTypeList) {
 export function fetchRuleTypeList () {
     return (dispatch, getState) => {
 
-        const { rule } = getState();
-        if (checkExpiryDate(rule.meta.updated)) return null;
+        const { rule, account } = getState();
+        if (checkExpiryDate(rule.meta.updated) && process.env.NODE_ENV === 'production') return null;
 
         dispatch(requestRuleTypeList());
 
-        return fetch(`${config}/rule/type`)
+        return fetch(`${config.api}/rule/type`, {
+            method: 'GET',
+            headers: {
+                'Authorization': account.token,
+            },
+        })
             .then(response => response.json())
             .then(data => dispatch(responseRuleTypeList(data.info)))
             .catch(error => addError('Загрузка типов общих правил', error.message));

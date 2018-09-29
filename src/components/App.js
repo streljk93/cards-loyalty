@@ -11,15 +11,19 @@ import JScreenCardsStore from '../containers/JScreenCardsStore';
 const menu = [[{
     icon: 'CreditCard',
     title: 'Карты',
+    href: '/cards',
 }, {
     icon: 'Face',
     title: 'Пользователи',
+    href: '/users',
 }], [{
     icon: 'Settings',
     title: 'Настройки',
+    href: '/settings',
 }, {
     icon: 'ExitToApp',
     title: 'Выход',
+    href: '/signout',
 }]];
 
 class App extends React.Component {
@@ -40,8 +44,8 @@ class App extends React.Component {
                     <div className={classes.toolbar} />
                     <div className={classes.content}>
                         
-                        <Route exact path='/' component={JScreenCardsStore} />
                         <Route exact path='/cards' component={JScreenCardsStore} />
+                        <Route exact path='/cards/:id' component={JScreenCardsStore} />
 
                     </div>
                 </main>

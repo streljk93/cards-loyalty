@@ -2,36 +2,36 @@ import config from '../config';
 import { addError } from './ui';
 import { checkExpiryDate } from "../libraries/helpers";
 
-function requestActionList () {
+function requestHandlerList () {
     return {
-        type: 'REQUEST_ACTION_LIST',
+        type: 'REQUEST_HANDLER_LIST',
     };
 }
 
-function responseActionList (actionList) {
+function responseHandlerList (handlerList) {
     return {
-        type: 'RESPONSE_ACTION_LIST',
-        payload: actionList,
+        type: 'RESPONSE_HANDLER_LIST',
+        payload: handlerList,
     };
 }
 
-export function fetchActionList () {
+export function fetchHandlerList () {
     return (dispatch, getState) => {
 
         const { rule, account } = getState();
         if (checkExpiryDate(rule.meta.updated) && process.env.NODE_ENV === 'production') return null;
 
-        dispatch(requestActionList());
+        dispatch(requestHandlerList());
 
-        return fetch(`${config.api}/rule/action`, {
+        return fetch(`${config.api}/rule/handler`, {
             method: 'GET',
             headers: {
                 'Authorization': account.token,
             },
         })
             .then(response => response.json())
-            .then(data => dispatch(responseActionList(data.info)))
-            .catch(error => addError('Загрузка общих событий', error.message));
+            .then(data => dispatch(responseHandlerList(data.info)))
+            .catch(error => addError('Загрузка общих правил', error.message));
 
     };
 }
