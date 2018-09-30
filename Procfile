@@ -1,2 +1,2 @@
-wep: npm install -g serve
-wep: serve -s build
+web: npm install -g serve
+web: serve -s build
