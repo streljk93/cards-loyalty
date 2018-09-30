@@ -13,6 +13,7 @@ export default (theme) => ({
         flexDirection: 'column',
         minWidth: 0,
         flexGrow: 1,
+        height: '100vh',
     },
     toolbar: theme.mixins.toolbar,
     content: {

@@ -22,7 +22,7 @@ class JDrawer extends React.Component {
     render() {
         const { classes, theme } = this.props;
         const drawer = (
-            <div>
+            <div style={{ height: '100vh' }}>
                 <div className={classes.toolbar} style={{
                     display: 'flex',
                     alignItems: 'center',

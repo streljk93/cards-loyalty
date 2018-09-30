@@ -1,7 +1,11 @@
 const initialState = {
     selected: null,
     data: [],
-    meta: {},
+    meta: {
+        isFetching: false,
+        editing: null,
+        updated: null,
+    },
 };
 
 const cardStore = (state = initialState, action) => {

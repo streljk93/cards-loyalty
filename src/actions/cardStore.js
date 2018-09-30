@@ -12,7 +12,7 @@ function requestCardStoreList () {
 
 function addCardStore ({ card_type_id, site_id, image, name, description }) {
     return {
-        type: 'ADD_CARD',
+        type: 'ADD_CARD_STORE',
         payload: {
             id: uuid(),
             card_type_id,

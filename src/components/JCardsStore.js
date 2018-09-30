@@ -9,7 +9,6 @@ import {
 // own components
 import styles from '../styles/JCardsStoreStyles';
 import JCardStore from './JCardStore';
-import JCardStoreEdit from './JCardStoreEdit';
 
 class JCardsStore extends React.Component {
 
@@ -24,47 +23,36 @@ class JCardsStore extends React.Component {
         return card;
     }
 
-    renderCard(info) {
-        if (this.props.match.params.id) {
-            if (this.props.match.params.id === info.id) {
-                return (
-                    <JCardStoreEdit
-                        key={info.id}
-                        id={info.id}
-                        slug={info.slug}
-                        image={info.image}
-                        name={info.name}
-                        description={info.description}
-                        qrcode={info.qrcode}
-                        lastupdated={info.lastupdated}
-                    />
-                );
-            }
-        }
-
-        return (
-            <JCardStore
-                key={info.id}
-                id={info.id}
-                slug={info.slug}
-                image={info.image}
-                name={info.name}
-                description={info.description}
-                qrcode={info.qrcode}
-                lastupdated={info.lastupdated}
-            />
-        );
-    }
+    // componentWillUpdate() {
+    //     this.dt1 = Date.now();
+    // }
+    //
+    // componentDidUpdate() {
+    //     this.dt2 = Date.now();
+    //     console.log((this.dt2 - this.dt1) / 1000);
+    // }
 
     render() {
-        console.log(this.props);
         const { classes, items } = this.props;
 
         return (
             <Grid className={classes.container} container spacing={24}>
                 {items.map((card, i) => {
-                    card = this.addTypeInfo(card);
-                    return this.renderCard(card);
+                    const id = this.props.match.params.id;
+                    const info = this.addTypeInfo(card);
+                    return (
+                        <JCardStore
+                            key={info.id}
+                            id={info.id}
+                            slug={info.slug}
+                            image={info.image}
+                            name={info.name}
+                            description={info.description}
+                            qrcode={info.qrcode}
+                            lastupdated={info.lastupdated}
+                            editing={id && id === info.id}
+                        />
+                    );
                 })}
             </Grid>
         );
