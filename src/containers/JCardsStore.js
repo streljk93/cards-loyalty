@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import 'moment/locale/ru';
 import {
@@ -6,9 +7,12 @@ import {
     withStyles,
 } from '@material-ui/core';
 
+// actions
+import { changeCardStoreTab } from "../actions/cardStore";
+
 // own components
 import styles from '../styles/JCardsStoreStyles';
-import JCardStore from './JCardStore';
+import JCardStore from '../components/JCardStore';
 
 class JCardsStore extends React.Component {
 
@@ -33,7 +37,7 @@ class JCardsStore extends React.Component {
     // }
 
     render() {
-        const { classes, items } = this.props;
+        const { classes, items, onChangeCardStoreTab } = this.props;
 
         return (
             <Grid className={classes.container} container spacing={24}>
@@ -43,13 +47,8 @@ class JCardsStore extends React.Component {
                     return (
                         <JCardStore
                             key={info.id}
-                            id={info.id}
-                            slug={info.slug}
-                            image={info.image}
-                            name={info.name}
-                            description={info.description}
-                            qrcode={info.qrcode}
-                            lastupdated={info.lastupdated}
+                            {...info}
+                            onChangeTab={onChangeCardStoreTab}
                             editing={id && id === info.id}
                         />
                     );
@@ -61,4 +60,11 @@ class JCardsStore extends React.Component {
 }
 
 JCardsStore = withRouter(withStyles(styles, { withTheme: true })(JCardsStore));
-export default JCardsStore;
+export default connect(
+    state => ({
+
+    }),
+    dispatch => ({
+        onChangeCardStoreTab: (id, tab) => dispatch(changeCardStoreTab(id, tab)),
+    })
+)(JCardsStore);

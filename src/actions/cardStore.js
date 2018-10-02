@@ -74,7 +74,7 @@ export function fetchCardStoreList () {
     return (dispatch, getState) => {
 
         const { cardStore, account } = getState();
-        if (checkExpiryDate(cardStore.meta.updated) && process.env.NODE_ENV === 'production') return null;
+        if (checkExpiryDate(cardStore.meta.updated)) return null;
 
         dispatch(requestCardStoreList());
 
@@ -88,5 +88,15 @@ export function fetchCardStoreList () {
             .then(data => dispatch(responseCardStoreList(data.info)))
             .catch(error => addError(error));
 
+    };
+}
+
+export function changeCardStoreTab (id, tab) {
+    return {
+        type: 'CHANGE_CARD_STORE_TAB',
+        payload: {
+            id,
+            tab,
+        },
     };
 }

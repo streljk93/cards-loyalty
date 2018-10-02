@@ -38,13 +38,24 @@ const cardStore = (state = initialState, action) => {
             return Object.assign({}, state, {
                 data: state.data.map(card => {
                     if (card.id === action.payload.id) {
-                        return action.payload;
+                        return {...card, ...action.payload};
                     }
                     return card;
                 }),
                 meta: Object.assign({}, state.meta, {
                     isFetching: false,
                 })
+            });
+
+        case 'CHANGE_CARD_STORE_TAB':
+            return Object.assign({}, state, {
+                data: state.data.map(card => {
+                    if (card.id === action.payload.id) {
+                        if (!card.hasOwnProperty('meta')) card.meta = {};
+                        card.meta.tab = action.payload.tab;
+                    }
+                    return card;
+                }),
             });
 
         default:

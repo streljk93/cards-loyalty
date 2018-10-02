@@ -19,7 +19,7 @@ export function fetchCardTypeList () {
     return (dispatch, getState) => {
 
         const { cardType, account } = getState();
-        if (checkExpiryDate(cardType.meta.updated) && process.env.NODE_ENV === 'production') return null;
+        if (checkExpiryDate(cardType.meta.updated)) return null;
 
         dispatch(requestCardTypeList());
 

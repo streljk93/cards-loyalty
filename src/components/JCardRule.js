@@ -4,7 +4,6 @@ import {
     TableCell,
     TableRow,
     Select,
-    MenuItem,
     TextField,
 } from '@material-ui/core';
 
@@ -99,9 +98,15 @@ class JCardRule extends React.Component {
     }
 
     render() {
-        const rule = this.props.rule.data.filter(rule => rule.id === this.props.ruleId)[0];
-        const action = this.props.action.data.filter(action => action.id === rule.action_id)[0];
-        const handler = this.props.handler.data.filter(handler => handler.id === rule.handler_id)[0];
+        const rule = this.props.rule.data
+            ? this.props.rule.data.filter(rule => rule.id === this.props.ruleId)[0]
+            : {};
+        const action = this.props.action.data
+            ? this.props.action.data.filter(action => action.id === rule.action_id)[0]
+            : {};
+        const handler = this.props.handler.data
+            ? this.props.handler.data.filter(handler => handler.id === rule.handler_id)[0]
+            : {};
         // const ruleType = this.props.ruleType.data.filter(ruleType => ruleType.id === rule.rule_type_id)[0];
 
         if (this.props.editing) return this.renderEdit({ rule, action, handler });

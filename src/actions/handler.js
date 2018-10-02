@@ -19,7 +19,7 @@ export function fetchHandlerList () {
     return (dispatch, getState) => {
 
         const { rule, account } = getState();
-        if (checkExpiryDate(rule.meta.updated) && process.env.NODE_ENV === 'production') return null;
+        if (checkExpiryDate(rule.meta.updated)) return null;
 
         dispatch(requestHandlerList());
 
