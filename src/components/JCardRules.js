@@ -2,7 +2,11 @@ import React from "react";
 import {
     Table,
     TableBody,
+    TableRow,
+    TableCell,
+    Button,
 } from '@material-ui/core';
+import * as Icons from '@material-ui/icons';
 
 import JCardRule from '../containers/JCardRule';
 
@@ -28,6 +32,16 @@ class JCardRules extends React.Component {
                             result={rule.result}
                             editing={this.props.editing}
                         />
+                    )}
+                    {this.props.editing && (
+                        <TableRow>
+                            <TableCell colSpan={6} style={{ padding: 0 }}>
+                                <Button size='small' color='default' fullWidth>
+                                    <Icons.Add />
+                                    Добавить правило
+                                </Button>
+                            </TableCell>
+                        </TableRow>
                     )}
                 </TableBody>
             </Table>

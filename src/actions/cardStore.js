@@ -26,6 +26,21 @@ function addCardStore ({ card_type_id, site_id, image, name, description }) {
     };
 }
 
+function editCardStore ({ id, card_type_id, site_id, image, name, description }) {
+    return {
+        type: 'EDIT_CARD_STORE',
+        payload: {
+            id,
+            card_type_id,
+            site_id,
+            image,
+            name,
+            description,
+            lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
+        },
+    };
+}
+
 function responseCardStoreList (cardStoreList) {
     return {
         type: 'RESPONSE_CARD_STORE_LIST',
@@ -40,21 +55,27 @@ function syncCardStoreList (cardStore) {
     };
 }
 
-export function uploadCardStore ({ card_type_id, site_id, image, name, description }) {
+export function uploadCardStore (id, { card_type_id, store_id, image, name, description }) {
+    const editing = (typeof id) !== 'object';
+
     return (dispatch, getState) => {
 
         // vars
-        const input = { card_type_id, site_id, image, name, description };
-        const actionAddCardStore = addCardStore(input);
-        const cardStore = actionAddCardStore.payload;
+        const url = editing ? `${config.api}/loyality/card-store/${id}` : `${config.api}/loyality/card-store`;
+        const method = editing ? 'PUT' : 'POST';
+        const input = editing
+            ? { image, name, description }
+            : { card_type_id, store_id, image, name, description };
+        const action = editing ? editCardStore({ ...input, id }) : addCardStore(input);
+        const body = action.payload;
         const state = getState();
 
-        dispatch(actionAddCardStore);
+        dispatch(action);
         dispatch(requestCardStoreList());
 
-        return fetch(`${config.api}/loyality/card`, {
-            method: 'POST',
-            body: JSON.stringify(cardStore),
+        return fetch(url, {
+            method,
+            body: JSON.stringify(body),
             headers: {
                 'Authorization': state.account.token,
                 'Content-Type': 'application/json',

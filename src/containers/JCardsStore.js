@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 
 // actions
-import { changeCardStoreTab } from "../actions/cardStore";
+import { changeCardStoreTab, uploadCardStore } from "../actions/cardStore";
 
 // own components
 import styles from '../styles/JCardsStoreStyles';
@@ -37,7 +37,7 @@ class JCardsStore extends React.Component {
     // }
 
     render() {
-        const { classes, items, onChangeCardStoreTab } = this.props;
+        const { classes, items, onChangeCardStoreTab, onUploadCardEditing } = this.props;
 
         return (
             <Grid className={classes.container} container spacing={24}>
@@ -48,6 +48,7 @@ class JCardsStore extends React.Component {
                         <JCardStore
                             key={info.id}
                             {...info}
+                            onUploadCardEditing={onUploadCardEditing}
                             onChangeTab={onChangeCardStoreTab}
                             editing={id && id === info.id}
                         />
@@ -66,5 +67,6 @@ export default connect(
     }),
     dispatch => ({
         onChangeCardStoreTab: (id, tab) => dispatch(changeCardStoreTab(id, tab)),
+        onUploadCardEditing: (id, data) => dispatch(uploadCardStore(id, data)),
     })
 )(JCardsStore);

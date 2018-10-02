@@ -18,14 +18,46 @@ import * as Icons from '@material-ui/icons';
 import moment from 'moment';
 
 import JCardRules from '../containers/JCardRules';
+import JDialogAddRules from './JDialogAddRules';
 import styles from '../styles/JCardStoreStyles';
 
 moment.locale('ru');
 
 class JCardStore extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            card: {
+                image: 'notfound.img',
+                name: '',
+                description: '',
+            },
+        };
+    }
+
+    componentDidMount() {
+        this.setState({
+            card: {
+                image: this.props.image,
+                name: this.props.name,
+                description: this.props.description,
+            },
+        });
+    }
+
+    onEditName({ value }) {
+        this.setState((state) => state.card.name = value);
+    }
+
+    onEditDescription({ value }) {
+        this.setState(state => state.card.description = value);
+    }
+
     renderHeader() {
-        const { classes, image, name, qrcode } = this.props;
+        const { classes, qrcode } = this.props;
+        const { image, name } = this.state.card;
 
         return (
             <CardMedia
@@ -46,24 +78,27 @@ class JCardStore extends React.Component {
     }
 
     renderHeaderEdit() {
-        const { classes, theme, image, name, qrcode } = this.props;
+        const { classes, theme, qrcode } = this.props;
+        const { image, name } = this.state.card;
 
         return (
             <CardMedia
                 className={classes.media}
                 image={image}
                 title={name}>
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: 1,
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                <div
+                    onClick={() => console.log('edit image')}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        zIndex: 1,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
                 }}>
                     <Icons.AddAPhoto style={{ color: theme.palette.grey[50], fontSize: '70px' }} />
                 </div>
@@ -73,7 +108,7 @@ class JCardStore extends React.Component {
                         fgColor='#000000'
                         level='L'
                         style={{ height: '70%', padding: '10px', background: 'white' }}
-                        value={qrcode}
+                        value={qrcode || 'notfound'}
                     />
                 </div>
             </CardMedia>
@@ -81,7 +116,8 @@ class JCardStore extends React.Component {
     }
 
     renderBodyInfo() {
-        const { name, description, lastupdated } = this.props;
+        const { lastupdated } = this.props;
+        const { name, description } = this.state.card;
 
         return (
             <CardContent>
@@ -101,21 +137,21 @@ class JCardStore extends React.Component {
     }
 
     renderBodyInfoEdit() {
-        const { name, description } = this.props;
+        const { name, description } = this.state.card;
 
         return (
             <CardContent>
                 <TextField
                     label='Название карты'
                     value={name}
-                    onChange={() => console.log('change')}
+                    onChange={({ target }) => this.onEditName(target)}
                     margin='normal'
                     variant='outlined'
                 />
                 <TextField
                     label='Описание карты'
                     value={description}
-                    onChange={() => console.log('change')}
+                    onChange={({ target }) => this.onEditDescription(target)}
                     margin='normal'
                     variant='outlined'
                     multiline
@@ -141,6 +177,7 @@ class JCardStore extends React.Component {
 
         return (
             <CardContent>
+                <JDialogAddRules onOpen={} />
                 <JCardRules cardId={id} editing={true} />
             </CardContent>
         );
@@ -180,12 +217,14 @@ class JCardStore extends React.Component {
     }
 
     renderFooterEdit() {
+        const { id, onUploadCardEditing } = this.props;
         return (
             <CardActions>
                 <Grid container>
                     <Grid item xs={12}>
                         <Link to={'/cards'}>
                             <Button
+                                onClick={() => onUploadCardEditing(id, this.state.card)}
                                 variant='outlined'
                                 size='small'
                                 color='primary'

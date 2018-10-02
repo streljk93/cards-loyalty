@@ -34,6 +34,16 @@ const cardStore = (state = initialState, action) => {
                 }],
             });
 
+        case 'EDIT_CARD_STORE':
+            return Object.assign({}, state, {
+                data: state.data.map(card => {
+                    if (card.id === action.payload.id) {
+                        return { ...card, ...action.payload };
+                    }
+                    return card;
+                }),
+            });
+
         case 'SYNC_CARD_STORE_LIST':
             return Object.assign({}, state, {
                 data: state.data.map(card => {
