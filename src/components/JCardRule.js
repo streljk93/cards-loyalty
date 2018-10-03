@@ -68,6 +68,7 @@ class JCardRule extends React.Component {
     // }
 
     renderEdit({ rule, action, handler }) {
+        const { id, value, result } = this.props;
         return (
             <TableRow>
                 <TableCell style={{ padding: 0 }}>
@@ -82,7 +83,7 @@ class JCardRule extends React.Component {
                 </TableCell>
                 <TableCell style={{ padding: 0 }}>
                     <Typography color='textSecondary' style={{ paddingLeft: '5px', fontSize: '12px' }}>
-                        {this.props.value ? `(${this.props.value})` : ''}
+                        {this.props.value ? `(${value})` : ''}
                     </Typography>
                 </TableCell>
                 <TableCell style={{ padding: 0 }}>
@@ -92,11 +93,11 @@ class JCardRule extends React.Component {
                 </TableCell>
                 <TableCell style={{ padding: 0 }}>
                     <Typography color='textSecondary' style={{ fontSize: '12px' }}>
-                        {this.props.result ? `(${this.props.result})` : ''}
+                        {this.props.result ? `(${result})` : ''}
                     </Typography>
                 </TableCell>
                 <TableCell style={{ padding: 0 }}>
-                    <IconButton>
+                    <IconButton onClick={() => this.props.onDeleteRuleCardStore(id)}>
                         <Icons.Delete />
                     </IconButton>
                 </TableCell>

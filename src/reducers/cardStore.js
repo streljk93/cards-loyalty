@@ -44,6 +44,11 @@ const cardStore = (state = initialState, action) => {
                 }),
             });
 
+        case 'DELETE_CARD_STORE':
+            return Object.assign({}, state, {
+                data: state.data.filter(card => card.id !== action.payload),
+            });
+
         case 'SYNC_CARD_STORE_LIST':
             return Object.assign({}, state, {
                 data: state.data.map(card => {

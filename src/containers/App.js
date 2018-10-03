@@ -9,6 +9,7 @@ import App from '../components/App';
 
 const mapStateToProps = (state) => ({
     drawerIsOpen: state.ui.drawerIsOpen,
+    isLoading: state.ui.isLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -13,7 +13,7 @@ import {
     TextField,
     withStyles,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import * as Icons from '@material-ui/icons';
 import moment from 'moment';
 
@@ -48,11 +48,25 @@ class JCardStore extends React.Component {
     }
 
     onEditName({ value }) {
+        this.props.onStartCommonLoader();
         this.setState((state) => state.card.name = value);
+
+        clearInterval(this.interval);
+        this.interval = setInterval(() => {
+            this.props.onUploadCardEditing(this.props.id, this.state.card);
+            clearInterval(this.interval)
+        }, 3000);
     }
 
     onEditDescription({ value }) {
+        this.props.onStartCommonLoader();
         this.setState(state => state.card.description = value);
+
+        clearInterval(this.interval);
+        this.interval = setInterval(() => {
+            this.props.onUploadCardEditing(this.props.id, this.state.card);
+            clearInterval(this.interval)
+        }, 3000);
     }
 
     renderHeader() {
@@ -176,8 +190,7 @@ class JCardStore extends React.Component {
         const { id } = this.props;
 
         return (
-            <CardContent>
-                <JDialogAddRules onOpen={} />
+            <CardContent style={{ overflowX: 'scroll' }}>
                 <JCardRules cardId={id} editing={true} />
             </CardContent>
         );
@@ -216,23 +229,50 @@ class JCardStore extends React.Component {
         );
     }
 
-    renderFooterEdit() {
-        const { id, onUploadCardEditing } = this.props;
+    renderFooterInfoEdit() {
+        const { isLoading } = this.props;
         return (
             <CardActions>
                 <Grid container>
                     <Grid item xs={12}>
                         <Link to={'/cards'}>
                             <Button
-                                onClick={() => onUploadCardEditing(id, this.state.card)}
                                 variant='outlined'
                                 size='small'
                                 color='primary'
+                                disabled={isLoading}
                                 fullWidth>
-                                <Icons.Save />
-                                сохранить
+                                <Icons.ArrowBackIos />
+                                назад
                             </Button>
                         </Link>
+                    </Grid>
+                </Grid>
+            </CardActions>
+        );
+    }
+
+    renderFooterRulesEdit() {
+        const { classes, isLoading } = this.props;
+        return (
+            <CardActions>
+                <Grid container>
+                    <Grid item xs={6}>
+                        <Link to={'/cards'}>
+                            <Button
+                                className={classes.cardActionLeft}
+                                variant='outlined'
+                                size='small'
+                                color='primary'
+                                disabled={isLoading}
+                                fullWidth>
+                                <Icons.ArrowBackIos />
+                                назад
+                            </Button>
+                        </Link>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <JDialogAddRules classButton={classes.cardActionRight} />
                     </Grid>
                 </Grid>
             </CardActions>
@@ -268,7 +308,12 @@ class JCardStore extends React.Component {
                             ? this.renderBodyRulesEdit()
                             : this.renderBodyRules())}
                     </div>
-                    {editing ? this.renderFooterEdit() : this.renderFooter()}
+                    {tab === 0 && (editing
+                        ? this.renderFooterInfoEdit()
+                        : this.renderFooter())}
+                    {tab === 1 && (editing
+                        ? this.renderFooterRulesEdit()
+                        : this.renderFooter())}
                 </Card>
             </Grid>
         );
@@ -276,5 +321,5 @@ class JCardStore extends React.Component {
 
 }
 
-JCardStore = withStyles(styles, { withTheme: true })(JCardStore);
+JCardStore = withRouter(withStyles(styles, { withTheme: true })(JCardStore));
 export default JCardStore;

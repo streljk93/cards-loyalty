@@ -6,7 +6,7 @@ const initialState = {
 const ruleCardStore = (state = initialState, action) => {
     switch (action.type) {
 
-        case 'REQUEST_RULE_CARD_STORE_LIST':
+        case 'REQUEST_RULE_CARD_STORE':
             return Object.assign({}, state, {
                 meta: Object.assign({}, state.meta, {
                     isFetching: true,
@@ -19,6 +19,21 @@ const ruleCardStore = (state = initialState, action) => {
                 meta: Object.assign({}, state.meta, {
                     isFetching: false,
                     updated: Date.now(),
+                }),
+            });
+
+        case 'RESPONSE_META_RULE_CARD_STORE':
+            return Object.assign({}, state, {
+                meta: Object.assign({}, state.meta, {
+                    isFetching: false,
+                }),
+            });
+
+        case 'DELETE_RULE_CARD_STORE':
+            return Object.assign({}, state, {
+                data: state.data.filter(rule => {
+                    console.log(`${rule.id} !== ${action.payload}`, rule.id !== action.payload);
+                    return rule.id !== action.payload
                 }),
             });
 

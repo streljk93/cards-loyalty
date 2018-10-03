@@ -1,10 +1,18 @@
 import config from '../config';
 import { addError } from './ui';
 import { checkExpiryDate } from "../libraries/helpers";
+import { startCommonLoader, stopCommonLoader } from "./ui";
 
-function requestRuleCardStoreList () {
+function deleteRuleCardStore (id) {
     return {
-        type: 'REQUEST_RULE_CARD_STORE_LIST',
+        type: 'DELETE_RULE_CARD_STORE',
+        payload: id,
+    };
+}
+
+function requestRuleCardStore () {
+    return {
+        type: 'REQUEST_RULE_CARD_STORE',
     };
 }
 
@@ -15,13 +23,20 @@ function responseRuleCardStoreList (ruleCardStoreList) {
     };
 }
 
+function responseMetaRuleCardStore() {
+    return {
+        type: 'RESPONSE_META_RULE_CARD_STORE',
+    };
+}
+
 export function fetchRuleCardStoreList () {
     return (dispatch, getState) => {
 
         const { rule, account } = getState();
         if (checkExpiryDate(rule.meta.updated)) return null;
 
-        dispatch(requestRuleCardStoreList());
+        dispatch(requestRuleCardStore());
+        dispatch(startCommonLoader());
 
         return fetch(`${config.api}/rule/card-store`, {
             method: 'GET',
@@ -30,8 +45,39 @@ export function fetchRuleCardStoreList () {
             },
         })
             .then(response => response.json())
-            .then(data => dispatch(responseRuleCardStoreList(data.info)))
-            .catch(error => addError('Загрузка общих правил', error.message));
+            .then(data => {
+                dispatch(responseRuleCardStoreList(data.info));
+                dispatch(stopCommonLoader());
+            })
+            .catch(error => {
+                dispatch(responseRuleCardStoreList([]));
+                dispatch(stopCommonLoader());
+                addError('Загрузка общих правил', error.message);
+            });
 
+    };
+}
+
+export function deleteRemoteRuleCardStore (id) {
+    return (dispatch, getState) => {
+
+        const { account } = getState();
+
+        dispatch(requestRuleCardStore());
+        dispatch(startCommonLoader());
+
+        return fetch(`${config.api}/rule/card-store/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': account.token,
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                dispatch(responseMetaRuleCardStore());
+                dispatch(stopCommonLoader());
+                if (data.success) dispatch(deleteRuleCardStore(id));
+                else addError('Удаление правила', 'Правило не было удалено');
+            });
     };
 }

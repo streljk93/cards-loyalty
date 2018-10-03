@@ -9,6 +9,7 @@ import {
 
 // actions
 import { changeCardStoreTab, uploadCardStore } from "../actions/cardStore";
+import { startCommonLoader } from "../actions/ui";
 
 // own components
 import styles from '../styles/JCardsStoreStyles';
@@ -37,7 +38,14 @@ class JCardsStore extends React.Component {
     // }
 
     render() {
-        const { classes, items, onChangeCardStoreTab, onUploadCardEditing } = this.props;
+        const {
+            classes,
+            items,
+            isLoading,
+            onChangeCardStoreTab,
+            onUploadCardEditing,
+            onStartCommonLoader,
+        } = this.props;
 
         return (
             <Grid className={classes.container} container spacing={24}>
@@ -50,6 +58,8 @@ class JCardsStore extends React.Component {
                             {...info}
                             onUploadCardEditing={onUploadCardEditing}
                             onChangeTab={onChangeCardStoreTab}
+                            onStartCommonLoader={onStartCommonLoader}
+                            isLoading={isLoading}
                             editing={id && id === info.id}
                         />
                     );
@@ -63,10 +73,11 @@ class JCardsStore extends React.Component {
 JCardsStore = withRouter(withStyles(styles, { withTheme: true })(JCardsStore));
 export default connect(
     state => ({
-
+        isLoading: state.ui.isLoading,
     }),
     dispatch => ({
         onChangeCardStoreTab: (id, tab) => dispatch(changeCardStoreTab(id, tab)),
         onUploadCardEditing: (id, data) => dispatch(uploadCardStore(id, data)),
+        onStartCommonLoader: () => dispatch(startCommonLoader()),
     })
 )(JCardsStore);

@@ -34,6 +34,7 @@ class App extends React.Component {
             <div className={classes.root}>
                 <JHeader
                     onToggleDrawer={this.props.onToggleDrawer}
+                    isLoading={this.props.isLoading}
                 />
                 <JDrawer
                     drawerIsOpen={this.props.drawerIsOpen}
@@ -43,7 +44,7 @@ class App extends React.Component {
                 <main className={classes.main}>
                     <div className={classes.toolbar} />
                     <div className={classes.content}>
-                        
+
                         <Route exact path='/cards' component={JScreenCardsStore} />
                         <Route exact path='/cards/:id' component={JScreenCardsStore} />
 

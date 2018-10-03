@@ -2,6 +2,7 @@ import React from 'react';
 import {
     AppBar,
     Toolbar,
+    LinearProgress,
     IconButton,
     Typography,
     Hidden,
@@ -13,33 +14,42 @@ import styles from '../styles/JHeaderStyles';
 class JHeader extends React.Component {
 
     render() {
-        const { classes } = this.props;
+        const { classes, isLoading } = this.props;
         return (
-            <AppBar className={classes.appBar}>
-                <Toolbar>
-                    <IconButton
-                        color='inherit'
-                        aria-label='open drawer'
-                        onClick={this.props.onToggleDrawer}
-                        className={classes.navIconHide}>
-                        <Icons.Menu />
-                    </IconButton>
-                    <Typography
-                        className={classes.navTitle}
-                        variant='title'
-                        color='inherit'
-                        noWrap>
-                        JK 
-                        <Hidden smDown>
-                            <Icons.CardGiftcard style={{
-                                paddingRight: '10px',
-                                paddingLeft: '10px',
-                            }} />
-                        </Hidden>
-                        Card
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <div>
+                <AppBar className={classes.appBar}>
+                    {isLoading && (
+                        <LinearProgress style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            width: '100%',
+                        }} />
+                    )}
+                    <Toolbar>
+                        <IconButton
+                            color='inherit'
+                            aria-label='open drawer'
+                            onClick={this.props.onToggleDrawer}
+                            className={classes.navIconHide}>
+                            <Icons.Menu />
+                        </IconButton>
+                        <Typography
+                            className={classes.navTitle}
+                            variant='title'
+                            color='inherit'
+                            noWrap>
+                            JK
+                            <Hidden smDown>
+                                <Icons.CardGiftcard style={{
+                                    paddingRight: '10px',
+                                    paddingLeft: '10px',
+                                }} />
+                            </Hidden>
+                            Card
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+            </div>
         );
     }
 

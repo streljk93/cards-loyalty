@@ -1,5 +1,5 @@
 import config from '../config';
-import { addError } from './ui';
+import { addError, startCommonLoader, stopCommonLoader } from './ui';
 import { checkExpiryDate } from "../libraries/helpers";
 
 function requestCardTypeList () {
@@ -22,6 +22,7 @@ export function fetchCardTypeList () {
         if (checkExpiryDate(cardType.meta.updated)) return null;
 
         dispatch(requestCardTypeList());
+        dispatch(startCommonLoader());
 
         return fetch(`${config.api}/loyality/card-type`, {
             method: 'GET',
@@ -30,8 +31,15 @@ export function fetchCardTypeList () {
             },
         })
             .then(response => response.json())
-            .then(data => dispatch(responseCardTypeList(data.info)))
-            .catch(error => addError('Загрузка карт', error.message));
+            .then(data => {
+                dispatch(responseCardTypeList(data.info));
+                dispatch(stopCommonLoader());
+            })
+            .catch(error => {
+                addError('Загрузка карт', error.message);
+                dispatch(responseCardTypeList([]));
+                dispatch(stopCommonLoader());
+            });
 
     }
 }

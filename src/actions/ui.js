@@ -1,3 +1,15 @@
+export function startCommonLoader () {
+    return {
+        type: 'START_COMMON_LOADER',
+    };
+}
+
+export function stopCommonLoader () {
+    return {
+        type: 'STOP_COMMON_LOADER',
+    };
+}
+
 export function openDrawer () {
     return {
         type: 'OPEN_DRAWER',

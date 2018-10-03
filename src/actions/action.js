@@ -1,6 +1,7 @@
 import config from '../config';
 import { addError } from './ui';
 import { checkExpiryDate } from "../libraries/helpers";
+import { startCommonLoader, stopCommonLoader } from "./ui";
 
 function requestActionList () {
     return {
@@ -22,6 +23,7 @@ export function fetchActionList () {
         if (checkExpiryDate(rule.meta.updated)) return null;
 
         dispatch(requestActionList());
+        dispatch(startCommonLoader());
 
         return fetch(`${config.api}/rule/action`, {
             method: 'GET',
@@ -30,8 +32,15 @@ export function fetchActionList () {
             },
         })
             .then(response => response.json())
-            .then(data => dispatch(responseActionList(data.info)))
-            .catch(error => addError('Загрузка общих событий', error.message));
+            .then(data => {
+                dispatch(responseActionList(data.info));
+                dispatch(stopCommonLoader());
+            })
+            .catch(error => {
+                dispatch(responseActionList([]));
+                dispatch(stopCommonLoader());
+                addError('Загрузка общих событий', error.message);
+            });
 
     };
 }

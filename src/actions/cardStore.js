@@ -2,6 +2,7 @@ import uuid from 'uuid/v4';
 import moment from 'moment';
 import { addError } from './ui';
 import { checkExpiryDate } from "../libraries/helpers";
+import { startCommonLoader, stopCommonLoader } from "./ui";
 import config from "../config";
 
 function requestCardStoreList () {
@@ -41,6 +42,13 @@ function editCardStore ({ id, card_type_id, site_id, image, name, description })
     };
 }
 
+// function deleteCardStore (id) {
+//     return {
+//         type: 'DELETE_CARD_STORE',
+//         payload: id,
+//     };
+// }
+
 function responseCardStoreList (cardStoreList) {
     return {
         type: 'RESPONSE_CARD_STORE_LIST',
@@ -72,6 +80,7 @@ export function uploadCardStore (id, { card_type_id, store_id, image, name, desc
 
         dispatch(action);
         dispatch(requestCardStoreList());
+        dispatch(startCommonLoader());
 
         return fetch(url, {
             method,
@@ -83,11 +92,15 @@ export function uploadCardStore (id, { card_type_id, store_id, image, name, desc
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success) syncCardStoreList(data.info);
-                else data.errors.map(error => dispatch(addError('Сохранение карты', error)));
+                if (!data.success) data.errors.map(error => dispatch(addError('Сохранение карты', error)));
+                dispatch(syncCardStoreList(data.success ? data.info : {}));
+                dispatch(stopCommonLoader());
             })
-            .catch(error => { dispatch(addError('Сохранение карты', error.message)); console.log(error); });
-
+            .catch(error => {
+                dispatch(addError('Сохранение карты', error.message));
+                dispatch(syncCardStoreList({}));
+                dispatch(stopCommonLoader());
+            });
     }
 }
 
@@ -98,6 +111,7 @@ export function fetchCardStoreList () {
         if (checkExpiryDate(cardStore.meta.updated)) return null;
 
         dispatch(requestCardStoreList());
+        dispatch(startCommonLoader());
 
         return fetch(`${config.api}/loyality/card-store`, {
             method: 'GET',
@@ -106,8 +120,15 @@ export function fetchCardStoreList () {
             },
         })
             .then(response => response.json())
-            .then(data => dispatch(responseCardStoreList(data.info)))
-            .catch(error => addError(error));
+            .then(data => {
+                dispatch(responseCardStoreList(data.info));
+                dispatch(stopCommonLoader());
+            })
+            .catch(error => {
+                addError(error);
+                dispatch(responseCardStoreList([]));
+                dispatch(stopCommonLoader());
+            });
 
     };
 }

@@ -1,4 +1,5 @@
 import config from "../config";
+import { startCommonLoader, stopCommonLoader } from "./ui";
 
 function requestCardValueList () {
     return {
@@ -20,6 +21,7 @@ export function fetchCardValueList () {
         const { account } = getState();
 
         dispatch(requestCardValueList());
+        dispatch(startCommonLoader());
 
         return fetch(`${config.api}/loyality/card`, {
             method: 'GET',
@@ -28,7 +30,10 @@ export function fetchCardValueList () {
             },
         })
             .then(response => response.json())
-            .then(data => receiveCardValueList(data.info));
+            .then(data => {
+                receiveCardValueList(data.info);
+                dispatch(stopCommonLoader());
+            });
 
     };
 }

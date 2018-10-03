@@ -1,6 +1,7 @@
 import config from '../config';
 import { addError } from './ui';
 import { checkExpiryDate } from "../libraries/helpers";
+import { startCommonLoader, stopCommonLoader } from "./ui";
 
 function requestRuleList () {
     return {
@@ -22,6 +23,7 @@ export function fetchRuleList () {
         if (checkExpiryDate(rule.meta.updated)) return null;
 
         dispatch(requestRuleList());
+        dispatch(startCommonLoader());
 
         return fetch(`${config.api}/rule`, {
             method: 'GET',
@@ -30,8 +32,15 @@ export function fetchRuleList () {
             },
         })
             .then(response => response.json())
-            .then(data => dispatch(responseRuleList(data.info)))
-            .catch(error => addError('Загрузка общих правил', error.message));
+            .then(data => {
+                dispatch(responseRuleList(data.info));
+                dispatch(stopCommonLoader());
+            })
+            .catch(error => {
+                dispatch(responseRuleList([]));
+                dispatch(stopCommonLoader());
+                addError('Загрузка общих правил', error.message);
+            });
 
     };
 }
