@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { QRCode } from 'react-qr-svg';
 import {
     Grid,
@@ -13,9 +14,13 @@ import {
     TextField,
     withStyles,
 } from '@material-ui/core';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as Icons from '@material-ui/icons';
 import moment from 'moment';
+
+// actions
+import { editCardStore, cancelEditCardStore, remoteSaveCardStore } from "../actions/cardStore";
+import { startCommonLoader } from "../actions/ui";
 
 import JCardRules from '../containers/JCardRules';
 import JDialogAddRules from './JDialogAddRules';
@@ -25,53 +30,49 @@ moment.locale('ru');
 
 class JCardStore extends React.Component {
 
-    constructor(props) {
-        super(props);
+    state = {
+        tab: 0,
+    };
 
-        this.state = {
-            card: {
-                image: 'notfound.img',
-                name: '',
-                description: '',
-            },
-        };
+    // shouldComponentUpdate(props, state, context) {
+    //
+    //     let updating = false;
+    //     for (let keyNext in props) {
+    //         if (!this.props[keyNext] || this.props[keyNext] !== props[keyNext]) {
+    //             console.log(keyNext);
+    //             console.log(this.props[keyNext], props[keyNext]);
+    //             updating = true;
+    //         }
+    //     }
+    //
+    //     return updating;
+    //
+    // }
+
+    onEdit() {
+        this.props.onEdit(this.props.id);
     }
 
-    componentDidMount() {
+    onCancel() {
+        this.props.onCancelEdit(this.props.id);
+    }
+
+    onEditName({ target: { value }}) {
+        console.log(value);
+    }
+
+    onEditDescription({ target: { value }}) {
+        console.log(value);
+    }
+
+    onChangeTab(value) {
         this.setState({
-            card: {
-                image: this.props.image,
-                name: this.props.name,
-                description: this.props.description,
-            },
+            tab: value,
         });
     }
 
-    onEditName({ value }) {
-        this.props.onStartCommonLoader();
-        this.setState((state) => state.card.name = value);
-
-        clearInterval(this.interval);
-        this.interval = setInterval(() => {
-            this.props.onUploadCardEditing(this.props.id, this.state.card);
-            clearInterval(this.interval)
-        }, 3000);
-    }
-
-    onEditDescription({ value }) {
-        this.props.onStartCommonLoader();
-        this.setState(state => state.card.description = value);
-
-        clearInterval(this.interval);
-        this.interval = setInterval(() => {
-            this.props.onUploadCardEditing(this.props.id, this.state.card);
-            clearInterval(this.interval)
-        }, 3000);
-    }
-
     renderHeader() {
-        const { classes, qrcode } = this.props;
-        const { image, name } = this.state.card;
+        const { classes, image, name, qrcode } = this.props;
 
         return (
             <CardMedia
@@ -92,8 +93,7 @@ class JCardStore extends React.Component {
     }
 
     renderHeaderEdit() {
-        const { classes, theme, qrcode } = this.props;
-        const { image, name } = this.state.card;
+        const { classes, theme, image, name, qrcode } = this.props;
 
         return (
             <CardMedia
@@ -130,8 +130,7 @@ class JCardStore extends React.Component {
     }
 
     renderBodyInfo() {
-        const { lastupdated } = this.props;
-        const { name, description } = this.state.card;
+        const { name, description, lastupdated } = this.props;
 
         return (
             <CardContent>
@@ -151,21 +150,21 @@ class JCardStore extends React.Component {
     }
 
     renderBodyInfoEdit() {
-        const { name, description } = this.state.card;
+        const { name, description } = this.props;
 
         return (
             <CardContent>
                 <TextField
                     label='Название карты'
-                    value={name}
-                    onChange={({ target }) => this.onEditName(target)}
+                    defaultValue={name}
+                    onChange={this.onEditName.bind(this)}
                     margin='normal'
                     variant='outlined'
                 />
                 <TextField
                     label='Описание карты'
-                    value={description}
-                    onChange={({ target }) => this.onEditDescription(target)}
+                    defaultValue={description}
+                    onChange={this.onEditDescription.bind(this)}
                     margin='normal'
                     variant='outlined'
                     multiline
@@ -197,22 +196,21 @@ class JCardStore extends React.Component {
     }
 
     renderFooter() {
-        const { classes, id } = this.props;
+        const { classes } = this.props;
 
         return (
             <CardActions>
                 <Grid container>
                     <Grid item xs={6}>
-                        <Link to={`/cards/${id}`}>
-                            <Button
-                                className={classes.cardActionLeft}
-                                variant='outlined'
-                                size='small'
-                                color='primary'>
-                                <Icons.Edit />
-                                изменить
-                            </Button>
-                        </Link>
+                        <Button
+                            onClick={this.onEdit.bind(this)}
+                            className={classes.cardActionLeft}
+                            variant='outlined'
+                            size='small'
+                            color='primary'>
+                            <Icons.Edit />
+                            изменить
+                        </Button>
                     </Grid>
                     <Grid item xs={6}>
                         <Button
@@ -230,22 +228,21 @@ class JCardStore extends React.Component {
     }
 
     renderFooterInfoEdit() {
-        const { isLoading } = this.props;
+        // const { isLoading } = this.props;
         return (
             <CardActions>
                 <Grid container>
                     <Grid item xs={12}>
-                        <Link to={'/cards'}>
-                            <Button
-                                variant='outlined'
-                                size='small'
-                                color='primary'
-                                disabled={isLoading}
-                                fullWidth>
-                                <Icons.ArrowBackIos />
-                                назад
-                            </Button>
-                        </Link>
+                        <Button
+                            variant='outlined'
+                            size='small'
+                            color='primary'
+                            // disabled={isLoading}
+                            onClick={this.onCancel.bind(this)}
+                            fullWidth>
+                            <Icons.ArrowBackIos />
+                            назад
+                        </Button>
                     </Grid>
                 </Grid>
             </CardActions>
@@ -253,7 +250,8 @@ class JCardStore extends React.Component {
     }
 
     renderFooterRulesEdit() {
-        const { classes, isLoading } = this.props;
+        // const { classes, isLoading } = this.props;
+        const { classes } = this.props;
         return (
             <CardActions>
                 <Grid container>
@@ -264,7 +262,8 @@ class JCardStore extends React.Component {
                                 variant='outlined'
                                 size='small'
                                 color='primary'
-                                disabled={isLoading}
+                                // disabled={isLoading}
+                                onClick={this.onCancel.bind(this)}
                                 fullWidth>
                                 <Icons.ArrowBackIos />
                                 назад
@@ -280,8 +279,8 @@ class JCardStore extends React.Component {
     }
 
     render() {
-        const { classes, id, editing, meta, onChangeTab } = this.props;
-        const tab = (meta && meta.tab) ? meta.tab : 0;
+        const { classes, editing } = this.props;
+        const tab = this.state.tab || 0;
 
         return (
             <Grid item xs={12} sm={6} md={4}>
@@ -292,7 +291,7 @@ class JCardStore extends React.Component {
                             <CardActions>
                                 <Tabs
                                     value={tab}
-                                    onChange={(event, value) => onChangeTab(id, value)}
+                                    onChange={(event, value) => this.onChangeTab(value)}
                                     indicatorColor="primary"
                                     textColor="primary"
                                     fullWidth>
@@ -321,5 +320,13 @@ class JCardStore extends React.Component {
 
 }
 
-JCardStore = withRouter(withStyles(styles, { withTheme: true })(JCardStore));
-export default JCardStore;
+JCardStore = withStyles(styles, { withTheme: true })(JCardStore);
+export default connect(
+    null,
+    dispatch => ({
+        onEdit: (id) => dispatch(editCardStore(id)),
+        onCancelEdit: (id) => dispatch(cancelEditCardStore(id)),
+        onStartCommonLoader: () => dispatch(startCommonLoader()),
+        onRemoteUpdate: (id, data) => dispatch(remoteSaveCardStore(id, data)),
+    }),
+)(JCardStore);

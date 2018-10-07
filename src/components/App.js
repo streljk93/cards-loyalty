@@ -46,7 +46,6 @@ class App extends React.Component {
                     <div className={classes.content}>
 
                         <Route exact path='/cards' component={JScreenCardsStore} />
-                        <Route exact path='/cards/:id' component={JScreenCardsStore} />
 
                     </div>
                 </main>

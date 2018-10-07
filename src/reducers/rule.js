@@ -1,6 +1,9 @@
 const initialState = {
     data: [],
-    meta: {},
+    meta: {
+        isFetching: false,
+        updated: null,
+    },
 };
 
 const rule = (state = initialState, action) => {

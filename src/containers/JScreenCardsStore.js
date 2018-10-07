@@ -2,20 +2,20 @@
 import { connect } from 'react-redux';
 
 // actions
-import { fetchCardStoreList } from '../actions/cardStore';
-import { fetchCardTypeList } from '../actions/cardType';
+import { remoteFetchCardStoreList } from '../actions/cardStore';
+import { remoteFetchCardTypeList } from '../actions/cardType';
 
 // screen
 import JScreenCardsStore from '../screen/JScreenCardsStore';
 
 const mapStateToProps = (state) => ({
-    cardType: state.cardType,
-    cardStore: state.cardStore,
+    cardType: state.cardType.data,
+    cardStore: state.cardStore.data,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    onFetchCardTypeList: () => dispatch(fetchCardTypeList()),
-    onFetchCardStoreList: () => dispatch(fetchCardStoreList()),
+    remoteFetchCardTypeList: () => dispatch(remoteFetchCardTypeList()),
+    remoteFetchCardStoreList: () => dispatch(remoteFetchCardStoreList()),
 });
 
 const JScreenCardsStoreContainer = connect(

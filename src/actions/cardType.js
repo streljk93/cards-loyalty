@@ -15,7 +15,7 @@ function responseCardTypeList (cardTypeList) {
     };
 }
 
-export function fetchCardTypeList () {
+export function remoteFetchCardTypeList () {
     return (dispatch, getState) => {
 
         const { cardType, account } = getState();

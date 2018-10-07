@@ -4,7 +4,7 @@ import * as Icons from '@material-ui/icons';
 
 // own components
 import JMenu from '../components/JMenu';
-import JCardsStore from '../containers/JCardsStore';
+import JCardsStore from '../components/JCardsStore';
 
 class JContentCardsStore extends React.Component {
 
@@ -25,8 +25,8 @@ class JContentCardsStore extends React.Component {
     }
 
     componentDidMount() {
-        this.props.onFetchCardTypeList();
-        this.props.onFetchCardStoreList();
+        this.props.remoteFetchCardTypeList();
+        this.props.remoteFetchCardStoreList();
     }
 
     render() {
@@ -46,7 +46,7 @@ class JContentCardsStore extends React.Component {
                         anchorEl={this.state.anchorEl}
                         open={Boolean(this.state.anchorEl)}
                         onClose={this.closeMenuCardType.bind(this)}>
-                        {this.props.cardType.data.map(card =>
+                        {this.props.cardType.map(card =>
                             <MenuItem
                                 key={card.id}
                                 onClick={this.closeMenuCardType.bind(this)}>
@@ -57,8 +57,8 @@ class JContentCardsStore extends React.Component {
                 </JMenu>
 
                 <JCardsStore
-                    items={this.props.cardStore.data}
-                    types={this.props.cardType.data}
+                    items={this.props.cardStore}
+                    types={this.props.cardType}
                 />
             </div>
         );

@@ -27,16 +27,29 @@ function addCardStore ({ card_type_id, site_id, image, name, description }) {
     };
 }
 
-function editCardStore ({ id, card_type_id, site_id, image, name, description }) {
+export function editCardStore (id) {
     return {
         type: 'EDIT_CARD_STORE',
+        payload: id,
+    };
+}
+
+export function cancelEditCardStore(id) {
+    return {
+        type: 'CANCEL_EDIT_CARD_STORE',
+        payload: id,
+    };
+}
+
+function changeCardStore ({ id, image, name, description }) {
+    return {
+        type: 'CHANGE_CARD_STORE',
         payload: {
             id,
-            card_type_id,
-            site_id,
             image,
             name,
             description,
+            isactive: null,
             lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
         },
     };
@@ -56,14 +69,14 @@ function responseCardStoreList (cardStoreList) {
     };
 }
 
-function syncCardStoreList (cardStore) {
+function responseCardStore (cardStore) {
     return {
-        type: 'SYNC_CARD_STORE_LIST',
+        type: 'RESPONSE_CARD_STORE',
         payload: cardStore,
     };
 }
 
-export function uploadCardStore (id, { card_type_id, store_id, image, name, description }) {
+export function remoteSaveCardStore (id, { card_type_id, store_id, image, name, description }) {
     const editing = (typeof id) !== 'object';
 
     return (dispatch, getState) => {
@@ -71,12 +84,10 @@ export function uploadCardStore (id, { card_type_id, store_id, image, name, desc
         // vars
         const url = editing ? `${config.api}/loyality/card-store/${id}` : `${config.api}/loyality/card-store`;
         const method = editing ? 'PUT' : 'POST';
-        const input = editing
-            ? { image, name, description }
-            : { card_type_id, store_id, image, name, description };
-        const action = editing ? editCardStore({ ...input, id }) : addCardStore(input);
+        const input = {id, card_type_id, store_id, image, name, description };
+        const action = editing ? changeCardStore(input) : addCardStore(input);
         const body = action.payload;
-        const state = getState();
+        const { account } = getState();
 
         dispatch(action);
         dispatch(requestCardStoreList());
@@ -86,25 +97,25 @@ export function uploadCardStore (id, { card_type_id, store_id, image, name, desc
             method,
             body: JSON.stringify(body),
             headers: {
-                'Authorization': state.account.token,
+                'Authorization': account.token,
                 'Content-Type': 'application/json',
             },
         })
             .then(response => response.json())
             .then(data => {
                 if (!data.success) data.errors.map(error => dispatch(addError('Сохранение карты', error)));
-                dispatch(syncCardStoreList(data.success ? data.info : {}));
+                dispatch(responseCardStore(data.success ? data.info : {}));
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
                 dispatch(addError('Сохранение карты', error.message));
-                dispatch(syncCardStoreList({}));
+                dispatch(responseCardStore({}));
                 dispatch(stopCommonLoader());
             });
     }
 }
 
-export function fetchCardStoreList () {
+export function remoteFetchCardStoreList () {
     return (dispatch, getState) => {
 
         const { cardStore, account } = getState();
@@ -130,15 +141,5 @@ export function fetchCardStoreList () {
                 dispatch(stopCommonLoader());
             });
 
-    };
-}
-
-export function changeCardStoreTab (id, tab) {
-    return {
-        type: 'CHANGE_CARD_STORE_TAB',
-        payload: {
-            id,
-            tab,
-        },
     };
 }

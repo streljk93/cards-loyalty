@@ -1,9 +1,7 @@
 const initialState = {
-    selected: null,
     data: [],
     meta: {
         isFetching: false,
-        editing: null,
         updated: null,
     },
 };
@@ -34,7 +32,7 @@ const cardStore = (state = initialState, action) => {
                 }],
             });
 
-        case 'EDIT_CARD_STORE':
+        case 'CHANGE_CARD_STORE':
             return Object.assign({}, state, {
                 data: state.data.map(card => {
                     if (card.id === action.payload.id) {
@@ -44,12 +42,38 @@ const cardStore = (state = initialState, action) => {
                 }),
             });
 
+        case 'EDIT_CARD_STORE':
+            return Object.assign({}, state, {
+                data: state.data.map(card => {
+                    if (card.id === action.payload) {
+                        card.editing = true;
+                    }
+                    return card;
+                })
+                // meta: Object.assign({}, state.meta, {
+                //     editing: action.payload,
+                // }),
+            });
+
+        case 'CANCEL_EDIT_CARD_STORE':
+            return Object.assign({}, state, {
+                data: state.data.map(card => {
+                    if (card.id === action.payload) {
+                        card.editing = false;
+                    }
+                    return card;
+                })
+                // meta: Object.assign({}, state.meta, {
+                //     editing: null,
+                // }),
+            });
+
         case 'DELETE_CARD_STORE':
             return Object.assign({}, state, {
                 data: state.data.filter(card => card.id !== action.payload),
             });
 
-        case 'SYNC_CARD_STORE_LIST':
+        case 'RESPONSE_CARD_STORE':
             return Object.assign({}, state, {
                 data: state.data.map(card => {
                     if (card.id === action.payload.id) {
@@ -60,17 +84,6 @@ const cardStore = (state = initialState, action) => {
                 meta: Object.assign({}, state.meta, {
                     isFetching: false,
                 })
-            });
-
-        case 'CHANGE_CARD_STORE_TAB':
-            return Object.assign({}, state, {
-                data: state.data.map(card => {
-                    if (card.id === action.payload.id) {
-                        if (!card.hasOwnProperty('meta')) card.meta = {};
-                        card.meta.tab = action.payload.tab;
-                    }
-                    return card;
-                }),
             });
 
         default:
