@@ -18,55 +18,6 @@ class JCardRule extends React.Component {
         this.props.onFetchHandlerList();
     }
 
-    // renderEdit({ rule, action, handler }) {
-    //     return (
-    //         <TableRow>
-    //             <TableCell style={{ padding: 0 }}>
-    //                 <Select
-    //                     native
-    //                     defaultValue={this.props.sign}
-    //                     onChange={() => console.log('change')}
-    //                     margin='dense'>
-    //                     <option value='>'>&gt;</option>
-    //                     <option value='>='>&gt;=</option>
-    //                     <option value='='>=</option>
-    //                     <option value='<'>&lt;</option>
-    //                     <option value='<='>&lt;=</option>
-    //                 </Select>
-    //             </TableCell>
-    //             <TableCell style={{ padding: 0 }}>
-    //                 <Typography color='textSecondary' style={{ paddingLeft: '5px', fontSize: '12px' }}>
-    //                     {action ? action.name : ''}
-    //                 </Typography>
-    //             </TableCell>
-    //             <TableCell style={{ padding: 0 }}>
-    //                 {this.props.value && (
-    //                     <TextField
-    //                         defaultValue={this.props.value}
-    //                         onChange={() => console.log('change')}
-    //                         margin='dense'
-    //                         type='number'
-    //                     />
-    //                 )}
-    //             </TableCell>
-    //             <TableCell style={{ padding: 0 }}>
-    //                 <Typography color='textSecondary' style={{ textAlign: 'center', fontSize: '12px' }}>
-    //                     {handler ? handler.name : ''}
-    //                 </Typography>
-    //             </TableCell>
-    //             <TableCell style={{ padding: 0 }}>
-    //                 {this.props.result && (
-    //                     <TextField
-    //                         defaultValue={this.props.result}
-    //                         onChange={() => console.log('change')}
-    //                         margin='dense'
-    //                     />
-    //                 )}
-    //             </TableCell>
-    //         </TableRow>
-    //     )
-    // }
-
     renderEdit({ rule, action, handler }) {
         const { id, value, result } = this.props;
         return (

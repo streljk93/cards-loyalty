@@ -32,8 +32,8 @@ function responseMetaRuleCardStore() {
 export function fetchRuleCardStoreList () {
     return (dispatch, getState) => {
 
-        const { rule, account } = getState();
-        if (checkExpiryDate(rule.meta.updated)) return null;
+        const { ruleCardStore, account } = getState();
+        if (checkExpiryDate(ruleCardStore.meta.updated)) return null;
 
         dispatch(requestRuleCardStore());
         dispatch(startCommonLoader());
@@ -64,7 +64,7 @@ export function deleteRemoteRuleCardStore (id) {
         const { account } = getState();
 
         dispatch(requestRuleCardStore());
-        dispatch(startCommonLoader());
+        // dispatch(startCommonLoader());
 
         return fetch(`${config.api}/rule/card-store/${id}`, {
             method: 'DELETE',
@@ -75,7 +75,7 @@ export function deleteRemoteRuleCardStore (id) {
             .then(response => response.json())
             .then(data => {
                 dispatch(responseMetaRuleCardStore());
-                dispatch(stopCommonLoader());
+                // dispatch(stopCommonLoader());
                 if (data.success) dispatch(deleteRuleCardStore(id));
                 else addError('Удаление правила', 'Правило не было удалено');
             });

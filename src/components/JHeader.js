@@ -19,7 +19,7 @@ class JHeader extends React.Component {
             <div>
                 <AppBar className={classes.appBar}>
                     {isLoading && (
-                        <LinearProgress style={{
+                        <LinearProgress color='primary' style={{
                             position: 'absolute',
                             bottom: 0,
                             width: '100%',

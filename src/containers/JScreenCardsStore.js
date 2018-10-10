@@ -11,6 +11,7 @@ import JScreenCardsStore from '../screen/JScreenCardsStore';
 const mapStateToProps = (state) => ({
     cardType: state.cardType.data,
     cardStore: state.cardStore.data,
+    ruleCardStore: state.ruleCardStore.data,
 });
 
 const mapDispatchToProps = (dispatch) => ({

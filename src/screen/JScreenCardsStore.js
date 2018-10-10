@@ -46,9 +46,9 @@ class JContentCardsStore extends React.Component {
                         anchorEl={this.state.anchorEl}
                         open={Boolean(this.state.anchorEl)}
                         onClose={this.closeMenuCardType.bind(this)}>
-                        {this.props.cardType.map(card =>
+                        {this.props.cardType.map((card, i) =>
                             <MenuItem
-                                key={card.id}
+                                key={i}
                                 onClick={this.closeMenuCardType.bind(this)}>
                                 {card.name}
                             </MenuItem>
@@ -59,6 +59,7 @@ class JContentCardsStore extends React.Component {
                 <JCardsStore
                     items={this.props.cardStore}
                     types={this.props.cardType}
+                    rules={this.props.ruleCardStore}
                 />
             </div>
         );

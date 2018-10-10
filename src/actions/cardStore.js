@@ -11,7 +11,7 @@ function requestCardStoreList () {
     };
 }
 
-function addCardStore ({ card_type_id, site_id, image, name, description }) {
+function createCardStore ({ card_type_id, site_id, image, name, description }) {
     return {
         type: 'ADD_CARD_STORE',
         payload: {
@@ -27,21 +27,7 @@ function addCardStore ({ card_type_id, site_id, image, name, description }) {
     };
 }
 
-export function editCardStore (id) {
-    return {
-        type: 'EDIT_CARD_STORE',
-        payload: id,
-    };
-}
-
-export function cancelEditCardStore(id) {
-    return {
-        type: 'CANCEL_EDIT_CARD_STORE',
-        payload: id,
-    };
-}
-
-function changeCardStore ({ id, image, name, description }) {
+function updateCardStore ({ id, image, name, description }) {
     return {
         type: 'CHANGE_CARD_STORE',
         payload: {
@@ -54,6 +40,32 @@ function changeCardStore ({ id, image, name, description }) {
         },
     };
 }
+
+export function updateCardStoreField (id, field, value) {
+    return {
+        type: 'UPDATE_CARD_STORE',
+        payload: {
+            id,
+            [field]: value,
+            isactive: null,
+            lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
+        },
+    };
+}
+
+// export function editCardStore (id) {
+//     return {
+//         type: 'EDIT_CARD_STORE',
+//         payload: id,
+//     };
+// }
+//
+// export function cancelEditCardStore(id) {
+//     return {
+//         type: 'CANCEL_EDIT_CARD_STORE',
+//         payload: id,
+//     };
+// }
 
 // function deleteCardStore (id) {
 //     return {
@@ -85,13 +97,12 @@ export function remoteSaveCardStore (id, { card_type_id, store_id, image, name, 
         const url = editing ? `${config.api}/loyality/card-store/${id}` : `${config.api}/loyality/card-store`;
         const method = editing ? 'PUT' : 'POST';
         const input = {id, card_type_id, store_id, image, name, description };
-        const action = editing ? changeCardStore(input) : addCardStore(input);
+        const action = editing ? updateCardStore(input) : createCardStore(input);
         const body = action.payload;
         const { account } = getState();
 
         dispatch(action);
         dispatch(requestCardStoreList());
-        dispatch(startCommonLoader());
 
         return fetch(url, {
             method,
@@ -105,12 +116,10 @@ export function remoteSaveCardStore (id, { card_type_id, store_id, image, name, 
             .then(data => {
                 if (!data.success) data.errors.map(error => dispatch(addError('Сохранение карты', error)));
                 dispatch(responseCardStore(data.success ? data.info : {}));
-                dispatch(stopCommonLoader());
             })
             .catch(error => {
                 dispatch(addError('Сохранение карты', error.message));
                 dispatch(responseCardStore({}));
-                dispatch(stopCommonLoader());
             });
     }
 }
@@ -142,4 +151,14 @@ export function remoteFetchCardStoreList () {
             });
 
     };
+}
+
+export function remoteSyncCardStore (id) {
+    return (dispatch, getState) => {
+        const { cardStore } = getState();
+
+        cardStore.data.forEach(card =>
+            (card.id === id && card.isactive === null) && dispatch(remoteSaveCardStore(card.id, card))
+        );
+    }
 }

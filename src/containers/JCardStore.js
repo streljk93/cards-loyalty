@@ -11,6 +11,7 @@ import {
     Typography,
     Tabs,
     Tab,
+    LinearProgress,
     TextField,
     withStyles,
 } from '@material-ui/core';
@@ -19,55 +20,81 @@ import * as Icons from '@material-ui/icons';
 import moment from 'moment';
 
 // actions
-import { editCardStore, cancelEditCardStore, remoteSaveCardStore } from "../actions/cardStore";
-import { startCommonLoader } from "../actions/ui";
+import { updateCardStoreField, remoteSyncCardStore } from "../actions/cardStore";
 
-import JCardRules from '../containers/JCardRules';
-import JDialogAddRules from './JDialogAddRules';
+import JCardRules from './JCardRules';
+import JDialogAddRules from '../components/JDialogAddRules';
+import JDialogMedia from './JDialogMedia';
 import styles from '../styles/JCardStoreStyles';
 
 moment.locale('ru');
 
 class JCardStore extends React.Component {
 
-    state = {
-        tab: 0,
-    };
+    constructor(props) {
+        super(props);
 
-    // shouldComponentUpdate(props, state, context) {
-    //
-    //     let updating = false;
-    //     for (let keyNext in props) {
-    //         if (!this.props[keyNext] || this.props[keyNext] !== props[keyNext]) {
-    //             console.log(keyNext);
-    //             console.log(this.props[keyNext], props[keyNext]);
-    //             updating = true;
-    //         }
-    //     }
-    //
-    //     return updating;
-    //
-    // }
-
-    onEdit() {
-        this.props.onEdit(this.props.id);
+        this.time = null;
+        this.state = {
+            tab: 0,
+            editing: false,
+            dialogMedia: false,
+        };
     }
 
-    onCancel() {
-        this.props.onCancelEdit(this.props.id);
+    componentWillUpdate(props) {
+        this.onSync(props);
     }
 
-    onEditName({ target: { value }}) {
-        console.log(value);
-    }
-
-    onEditDescription({ target: { value }}) {
-        console.log(value);
+    onSync(props) {
+        if (props.isactive === null) {
+            clearInterval(this.time);
+            this.time = setInterval(() => {
+                this.props.onRemoteSync(props.id);
+                clearInterval(this.time);
+            }, 3000);
+        }
     }
 
     onChangeTab(value) {
         this.setState({
             tab: value,
+        });
+    }
+
+    onEdit() {
+        this.setState({ editing: true });
+    }
+
+    onCancel() {
+        this.setState({ editing: false });
+    }
+
+    onRemoteUpdateField(field, value) {
+        this.props.onUpdateField(this.props.id, field, value);
+    }
+
+    onEditName({ target: { value }}) {
+        this.onRemoteUpdateField('name', value);
+    }
+
+    onEditDescription({ target: { value }}) {
+        this.onRemoteUpdateField('description', value);
+    }
+
+    onEditImage(url) {
+        this.onRemoteUpdateField('image', url);
+    }
+
+    openDialogMedia() {
+        this.setState({
+            dialogMedia: true,
+        });
+    }
+
+    closeDialogMedia() {
+        this.setState({
+            dialogMedia: false,
         });
     }
 
@@ -100,8 +127,13 @@ class JCardStore extends React.Component {
                 className={classes.media}
                 image={image}
                 title={name}>
+                <JDialogMedia
+                    open={this.state.dialogMedia}
+                    onClose={this.closeDialogMedia.bind(this)}
+                    onSaveUrl={this.onEditImage.bind(this)}
+                />
                 <div
-                    onClick={() => console.log('edit image')}
+                    onClick={this.openDialogMedia.bind(this)}
                     style={{
                         position: 'absolute',
                         top: 0,
@@ -279,18 +311,23 @@ class JCardStore extends React.Component {
     }
 
     render() {
-        const { classes, editing } = this.props;
-        const tab = this.state.tab || 0;
+        const { classes, isactive } = this.props;
+        const { tab, editing } = this.state;
+        const cardTab = tab || 0;
 
         return (
             <Grid item xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
+                    {(isactive === null ||
+                        (this.props.rules.filter(rule => null === rule.isactive).length > 0)) && (
+                            <LinearProgress color="primary" className={classes.loader} />
+                    )}
                     <div>
                         <div>
                             {editing ? this.renderHeaderEdit() : this.renderHeader()}
                             <CardActions>
                                 <Tabs
-                                    value={tab}
+                                    value={cardTab}
                                     onChange={(event, value) => this.onChangeTab(value)}
                                     indicatorColor="primary"
                                     textColor="primary"
@@ -300,17 +337,17 @@ class JCardStore extends React.Component {
                                 </Tabs>
                             </CardActions>
                         </div>
-                        {tab === 0 && (editing
+                        {cardTab === 0 && (editing
                             ? this.renderBodyInfoEdit()
                             : this.renderBodyInfo())}
-                        {tab === 1 && (editing
+                        {cardTab === 1 && (editing
                             ? this.renderBodyRulesEdit()
                             : this.renderBodyRules())}
                     </div>
-                    {tab === 0 && (editing
+                    {cardTab === 0 && (editing
                         ? this.renderFooterInfoEdit()
                         : this.renderFooter())}
-                    {tab === 1 && (editing
+                    {cardTab === 1 && (editing
                         ? this.renderFooterRulesEdit()
                         : this.renderFooter())}
                 </Card>
@@ -324,9 +361,7 @@ JCardStore = withStyles(styles, { withTheme: true })(JCardStore);
 export default connect(
     null,
     dispatch => ({
-        onEdit: (id) => dispatch(editCardStore(id)),
-        onCancelEdit: (id) => dispatch(cancelEditCardStore(id)),
-        onStartCommonLoader: () => dispatch(startCommonLoader()),
-        onRemoteUpdate: (id, data) => dispatch(remoteSaveCardStore(id, data)),
-    }),
+        onUpdateField: (id, field, value) => dispatch(updateCardStoreField(id, field, value)),
+        onRemoteSync: (id) => dispatch(remoteSyncCardStore(id)),
+    })
 )(JCardStore);

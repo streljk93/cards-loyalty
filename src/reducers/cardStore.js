@@ -32,7 +32,7 @@ const cardStore = (state = initialState, action) => {
                 }],
             });
 
-        case 'CHANGE_CARD_STORE':
+        case 'UPDATE_CARD_STORE':
             return Object.assign({}, state, {
                 data: state.data.map(card => {
                     if (card.id === action.payload.id) {
@@ -42,31 +42,25 @@ const cardStore = (state = initialState, action) => {
                 }),
             });
 
-        case 'EDIT_CARD_STORE':
-            return Object.assign({}, state, {
-                data: state.data.map(card => {
-                    if (card.id === action.payload) {
-                        card.editing = true;
-                    }
-                    return card;
-                })
-                // meta: Object.assign({}, state.meta, {
-                //     editing: action.payload,
-                // }),
-            });
-
-        case 'CANCEL_EDIT_CARD_STORE':
-            return Object.assign({}, state, {
-                data: state.data.map(card => {
-                    if (card.id === action.payload) {
-                        card.editing = false;
-                    }
-                    return card;
-                })
-                // meta: Object.assign({}, state.meta, {
-                //     editing: null,
-                // }),
-            });
+        // case 'EDIT_CARD_STORE':
+        //     return Object.assign({}, state, {
+        //         data: state.data.map(card => {
+        //             if (card.id === action.payload) {
+        //                 card.editing = true;
+        //             }
+        //             return card;
+        //         })
+        //     });
+        //
+        // case 'CANCEL_EDIT_CARD_STORE':
+        //     return Object.assign({}, state, {
+        //         data: state.data.map(card => {
+        //             if (card.id === action.payload) {
+        //                 card.editing = false;
+        //             }
+        //             return card;
+        //         })
+        //     });
 
         case 'DELETE_CARD_STORE':
             return Object.assign({}, state, {

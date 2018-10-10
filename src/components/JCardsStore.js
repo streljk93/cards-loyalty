@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import 'moment/locale/ru';
 import {
     Grid,
@@ -8,7 +7,7 @@ import {
 
 // own components
 import styles from '../styles/JCardsStoreStyles';
-import JCardStore from './JCardStore';
+import JCardStore from '../containers/JCardStore';
 
 class JCardsStore extends React.Component {
 
@@ -23,6 +22,7 @@ class JCardsStore extends React.Component {
         return card;
     }
 
+
     render() {
         const {
             classes,
@@ -31,19 +31,18 @@ class JCardsStore extends React.Component {
 
         return (
             <Grid className={classes.container} container spacing={24}>
-                {items.map(card => {
-                    const info = this.addTypeInfo(card);
-                    return (
-                        <JCardStore
-                            key={info.id}
-                            {...info}
-                        />
-                    );
-                })}
+                {items.map((card, i) =>
+                    <JCardStore
+                        key={i}
+                        {...this.addTypeInfo(card)}
+                        rules={this.props.rules.filter(rule => rule.card_store_id === card.id)}
+                    />
+                )}
             </Grid>
         );
     }
 
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(JCardsStore));
+JCardsStore = withStyles(styles, { withTheme: true })(JCardsStore);
+export default JCardsStore;

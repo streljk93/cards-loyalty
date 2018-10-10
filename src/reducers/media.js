@@ -1,19 +1,29 @@
 const initialState = {
     data: [],
-    meta: {},
+    meta: {
+        isFetching: false,
+        updated: null,
+    },
 };
 
-const ruleCardStore = (state = initialState, action) => {
+export default (state = initialState, action) => {
     switch (action.type) {
 
-        case 'REQUEST_RULE_CARD_STORE':
+        case 'REQUEST_MEDIA':
             return Object.assign({}, state, {
                 meta: Object.assign({}, state.meta, {
                     isFetching: true,
                 }),
             });
 
-        case 'RESPONSE_RULE_CARD_STORE_LIST':
+        case 'RESPONSE_MEDIA':
+            return Object.assign({}, state, {
+                meta: Object.assign({}, state.meta, {
+                    isFetching: false,
+                }),
+            });
+
+        case 'RESPONSE_MEDIA_LIST':
             return Object.assign({}, state, {
                 data: action.payload,
                 meta: Object.assign({}, state.meta, {
@@ -22,18 +32,9 @@ const ruleCardStore = (state = initialState, action) => {
                 }),
             });
 
-        case 'RESPONSE_META_RULE_CARD_STORE':
+        case 'CREATE_MEDIA':
             return Object.assign({}, state, {
-                meta: Object.assign({}, state.meta, {
-                    isFetching: false,
-                }),
-            });
-
-        case 'DELETE_RULE_CARD_STORE':
-            return Object.assign({}, state, {
-                data: state.data.filter(rule => {
-                    return rule.id !== action.payload
-                }),
+                data: [ ...state.data, { ...action.payload }],
             });
 
         default:
@@ -42,4 +43,3 @@ const ruleCardStore = (state = initialState, action) => {
     }
 };
 
-export default ruleCardStore;
