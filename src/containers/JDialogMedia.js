@@ -3,20 +3,17 @@ import { connect } from 'react-redux';
 import {
     Grid,
     Dialog,
-    AppBar,
-    Toolbar,
     Slide,
     Button,
-    IconButton,
-    Typography,
     withStyles,
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
 
 // actions
-import { remoteFetchMediaList, remoteUploadMedia } from "../actions/media";
+import { remoteFetchMediaList, remoteUploadMedia, remoteDeleteMedia } from "../actions/media";
 
 // own components
+import JHeader from '../components/JHeader';
 import styles from '../styles/JDialogMediaStyles';
 
 function Transition(props) {
@@ -30,24 +27,30 @@ class JDialogMedia extends React.Component {
     }
 
     render() {
-        const { classes, media, onRemoteUploadMedia } = this.props;
+        const {
+            classes,
+            isLoading,
+            media,
+            onRemoteUploadMedia,
+            onRemoteDeleteMedia,
+            onClose,
+            onSaveUrl,
+            open
+        } = this.props;
         return (
             <div>
                 <Dialog
                     fullScreen
-                    open={this.props.open}
-                    onClose={this.props.onClose}
+                    open={open}
+                    onClose={onClose}
                     TransitionComponent={Transition}>
-                    <AppBar className={classes.appBar}>
-                        <Toolbar className={classes.toolbar}>
-                            <IconButton color="inherit" onClick={this.props.onClose} aria-label="Close">
-                                <Icons.Close />
-                            </IconButton>
-                            <Typography variant="title" color="inherit" className={classes.navTitle}>
-                                JKMedia
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
+                    <JHeader
+                        title='JK Media'
+                        onAction={onClose}
+                        iconAction='Close'
+                        isLoading={isLoading}
+                        onlyMobile
+                    />
                     <div className={classes.toolbar} />
                     <div className={classes.main}>
                         <div className={classes.button}>
@@ -65,16 +68,23 @@ class JDialogMedia extends React.Component {
                             <Grid container spacing={16}>
                                 {media.sort((a, b) => new Date(b.lastupdated) - new Date(a.lastupdated))
                                     .map((item, i) =>
-                                        <Grid
-                                            key={i}
-                                            item
-                                            xs={12} sm={6} md={4}
-                                            onClick={() => {
-                                                this.props.onSaveUrl(item.url);
-                                                this.props.onClose();
-                                            }}
-                                            className={classes.mediaItem}>
-                                            <img src={item.url} className={classes.media} alt={item.url} />
+                                        <Grid key={i} item xs={12} sm={6} md={4} className={classes.mediaItem}>
+                                            <img
+                                                src={item.url}
+                                                className={classes.media}
+                                                alt={item.url}
+                                                onClick={() => {
+                                                    onSaveUrl(item.url);
+                                                    onClose();
+                                                }}
+                                            />
+                                            <Button
+                                                variant='contained'
+                                                color='secondary'
+                                                className={classes.buttonDelete}
+                                                onClick={() => onRemoteDeleteMedia(item.id)}>
+                                                Удалить
+                                            </Button>
                                         </Grid>
                                 )}
                             </Grid>
@@ -91,10 +101,12 @@ JDialogMedia = withStyles(styles, { withTheme: true })(JDialogMedia);
 JDialogMedia = connect(
     state => ({
         media: state.media.data,
+        isLoading: state.ui.isLoading,
     }),
     dispatch => ({
         onRemoteFetchMediaList: () => dispatch(remoteFetchMediaList()),
         onRemoteUploadMedia: (image) => dispatch(remoteUploadMedia(image)),
+        onRemoteDeleteMedia: (id) => dispatch(remoteDeleteMedia(id)),
     })
 )(JDialogMedia);
 export default JDialogMedia;

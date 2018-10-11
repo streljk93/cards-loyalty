@@ -31,7 +31,7 @@ export function toggleDrawer () {
     };
 }
 
-export function addError ({ title, text }) {
+export function addError (title, text) {
     return {
         type: 'ADD_ERROR',
         payload: {

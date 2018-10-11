@@ -39,11 +39,19 @@ export default (theme) => ({
         paddingRight: theme.spacing.unit * 3,
     },
     mediaItem: {
+        position: 'relative',
         cursor: 'pointer',
     },
     media: {
         width: '100%',
-        height: '100%',
+        height: '300px',
+        // height: '100%',
         objectFit: 'cover',
-    }
+    },
+    buttonDelete: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        margin: '20px',
+    },
 });

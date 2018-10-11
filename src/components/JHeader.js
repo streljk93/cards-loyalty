@@ -14,7 +14,10 @@ import styles from '../styles/JHeaderStyles';
 class JHeader extends React.Component {
 
     render() {
-        const { classes, isLoading } = this.props;
+        const { classes, title, isLoading, onAction, iconAction, iconMenu, onlyMobile } = this.props;
+        const IconAction = Icons[iconAction];
+        const IconMenu = Icons[iconMenu];
+        const titleElem = title.split(' ');
         return (
             <div>
                 <AppBar className={classes.appBar}>
@@ -29,23 +32,25 @@ class JHeader extends React.Component {
                         <IconButton
                             color='inherit'
                             aria-label='open drawer'
-                            onClick={this.props.onToggleDrawer}
-                            className={classes.navIconHide}>
-                            <Icons.Menu />
+                            onClick={onAction}
+                            className={onlyMobile ? null : classes.navIconHide}>
+                            <IconAction />
                         </IconButton>
                         <Typography
                             className={classes.navTitle}
                             variant='title'
                             color='inherit'
                             noWrap>
-                            JK
-                            <Hidden smDown>
-                                <Icons.CardGiftcard style={{
-                                    paddingRight: '10px',
-                                    paddingLeft: '10px',
-                                }} />
-                            </Hidden>
-                            Card
+                            {titleElem[0] || ''}
+                            {!onlyMobile && (
+                                <Hidden smDown>
+                                    <IconMenu style={{
+                                        paddingRight: '10px',
+                                        paddingLeft: '10px',
+                                    }} />
+                                </Hidden>
+                            )}
+                            {titleElem[1] || ''}
                         </Typography>
                     </Toolbar>
                 </AppBar>

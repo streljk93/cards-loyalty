@@ -34,6 +34,13 @@ export function createMedia ({ id, store_id, url, isactive, lastupdated }) {
     };
 }
 
+export function deleteMedia (id) {
+    return {
+        type: 'DELETE_MEDIA',
+        payload: id,
+    };
+}
+
 export function remoteFetchMediaList () {
     return (dispatch, getState) => {
 
@@ -55,7 +62,7 @@ export function remoteFetchMediaList () {
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
-                dispatch(addError(error));
+                dispatch(addError('Получение медиафайлов', error));
                 dispatch(responseMediaList([]));
                 dispatch(stopCommonLoader());
             });
@@ -90,7 +97,36 @@ export function remoteUploadMedia (image) {
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
-                dispatch(addError('Сохранение карты', error.message));
+                dispatch(addError('Загрузка медиафайла', error.message));
+                dispatch(responseMedia());
+                dispatch(stopCommonLoader());
+            })
+
+    }
+}
+
+export function remoteDeleteMedia (id) {
+    return (dispatch, getState) => {
+
+        const { account } = getState();
+
+        dispatch(requestMedia());
+        dispatch(startCommonLoader());
+
+        return fetch(`${config.api}/media/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': account.token,
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) dispatch(deleteMedia(id));
+                dispatch(responseMedia());
+                dispatch(stopCommonLoader());
+            })
+            .catch(error => {
+                dispatch(addError('Удаление медиафайла', error.message));
                 dispatch(responseMedia());
                 dispatch(stopCommonLoader());
             })

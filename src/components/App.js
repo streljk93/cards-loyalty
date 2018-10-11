@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { withStyles } from '@material-ui/core';
-import styles from '../styles/AppStyles';
 
 // own components
 import JHeader from './JHeader';
 import JDrawer from './JDrawer';
 import JScreenCardsStore from '../containers/JScreenCardsStore';
+import styles from '../styles/AppStyles';
 
 const menu = [[{
     icon: 'CreditCard',
@@ -33,7 +33,10 @@ class App extends React.Component {
         return (
             <div className={classes.root}>
                 <JHeader
-                    onToggleDrawer={this.props.onToggleDrawer}
+                    title='JK Card'
+                    onAction={this.props.onToggleDrawer}
+                    iconAction='Menu'
+                    iconMenu='CardGiftcard'
                     isLoading={this.props.isLoading}
                 />
                 <JDrawer

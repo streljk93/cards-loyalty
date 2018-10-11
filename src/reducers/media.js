@@ -37,6 +37,11 @@ export default (state = initialState, action) => {
                 data: [ ...state.data, { ...action.payload }],
             });
 
+        case 'DELETE_MEDIA':
+            return Object.assign({}, state, {
+                data: state.data.filter(media => media.id !== action.payload),
+            });
+
         default:
             return state;
 
