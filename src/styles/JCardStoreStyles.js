@@ -17,6 +17,9 @@ export default (theme) => ({
         paddingTop: '50%', // 16:9
         position: 'relative',
     },
+    tabRoot: {
+        minWidth: 72,
+    },
     expansions: {
         marginTop: '20px',
     },

@@ -15,7 +15,7 @@ function receiveCardValueList (cardValueList) {
     };
 }
 
-export function fetchCardValueList () {
+export function remoteFetchCardValueList () {
     return (dispatch, getState) => {
 
         const { account } = getState();

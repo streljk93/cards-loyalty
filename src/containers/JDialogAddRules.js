@@ -16,6 +16,14 @@ import {
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
 
+// actions
+import { remoteFetchActionList } from "../actions/action";
+import { remoteFetchHandlerList } from "../actions/handler";
+import { remoteFetchRuleTypeList } from "../actions/ruleType";
+import { remoteFetchRuleList } from "../actions/rule";
+import { remoteFetchRuleCardStoreList } from "../actions/ruleCardStore";
+import { remoteFetchCardTypeList } from "../actions/cardType";
+
 // own components
 import styles from '../styles/JDialogAddRulesStyles';
 
@@ -28,6 +36,15 @@ class JDialogAddRules extends React.Component {
             rule: '',
             open: false,
         };
+    }
+
+    componentWillMount() {
+        this.props.onRemoteFetchActionList();
+        this.props.onRemoteFetchHandlerList();
+        this.props.onRemoteFetchRuleTypeList();
+        this.props.onRemoteFetchRuleList();
+        this.props.onRemoteFetchRuleCardStoreList();
+        this.props.onRemoteFetchCardTypeList();
     }
 
     onClickOpen() {
@@ -89,13 +106,20 @@ JDialogAddRules = withStyles(styles, { withTheme: true })(JDialogAddRules);
 JDialogAddRules = withMobileDialog({ breakpoint: 'xs' })(JDialogAddRules);
 JDialogAddRules = connect(
     state => ({
-        action: state.action.data,
-        handler: state.handler.data,
-        rule: state.rule.data,
-        ruleCardStore: state.ruleCardStore.data,
-        ruleCardType: state.ruleCardType.data,
+        action: state.action,
+        handler: state.handler,
+        rule: state.rule,
+        ruleCardStore: state.ruleCardStore,
+        ruleCardType: state.ruleCardType,
     }),
-    null
+    dispatch => ({
+        onRemoteFetchActionList: () => dispatch(remoteFetchActionList()),
+        onRemoteFetchHandlerList: () => dispatch(remoteFetchHandlerList()),
+        onRemoteFetchRuleTypeList: () => dispatch(remoteFetchRuleTypeList()),
+        onRemoteFetchRuleList: () => dispatch(remoteFetchRuleList()),
+        onRemoteFetchRuleCardStoreList: () => dispatch(remoteFetchRuleCardStoreList()),
+        onRemoteFetchCardTypeList: () => dispatch(remoteFetchCardTypeList()),
+    })
 )(JDialogAddRules);
 
 export default JDialogAddRules;

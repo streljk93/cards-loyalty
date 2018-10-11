@@ -16,7 +16,7 @@ function responseHandlerList (handlerList) {
     };
 }
 
-export function fetchHandlerList () {
+export function remoteFetchHandlerList () {
     return (dispatch, getState) => {
 
         const { rule, account } = getState();

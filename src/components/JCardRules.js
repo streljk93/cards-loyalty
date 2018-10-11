@@ -9,7 +9,7 @@ import JCardRule from '../containers/JCardRule';
 class JCardRules extends React.Component {
 
     componentDidMount() {
-        this.props.onFetchRuleCardStoreList();
+        this.props.onRemoteFetchRuleCardStoreList();
     }
 
     render() {

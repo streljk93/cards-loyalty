@@ -16,7 +16,7 @@ function responseRuleList (ruleList) {
     };
 }
 
-export function fetchRuleList () {
+export function remoteFetchRuleList () {
     return (dispatch, getState) => {
 
         const { rule, account } = getState();

@@ -76,7 +76,7 @@ class JDrawer extends React.Component {
         );
         return (
             <div>
-                <Hidden mdUp>
+                <Hidden lgUp>
                     <Drawer
                         variant='temporary'
                         open={this.props.drawerIsOpen}
@@ -90,7 +90,7 @@ class JDrawer extends React.Component {
                         {drawer}
                     </Drawer>
                 </Hidden>
-                <Hidden smDown implementation='css'>
+                <Hidden mdDown implementation='css'>
                     <Drawer
                         variant='permanent'
                         open

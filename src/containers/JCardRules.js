@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 // actions
-import { fetchRuleCardStoreList } from "../actions/ruleCardStore";
+import { remoteFetchRuleCardStoreList } from "../actions/ruleCardStore";
 
 // component
 import JCardRules from '../components/JCardRules';
@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onFetchRuleCardStoreList: () => dispatch(fetchRuleCardStoreList()),
+    onRemoteFetchRuleCardStoreList: () => dispatch(remoteFetchRuleCardStoreList()),
 });
 
 const JCardRulesContainer = connect(

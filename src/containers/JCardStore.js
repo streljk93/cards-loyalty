@@ -332,8 +332,8 @@ class JCardStore extends React.Component {
                                     indicatorColor="primary"
                                     textColor="primary"
                                     fullWidth>
-                                    <Tab label="Информация" />
-                                    <Tab label="Правила" />
+                                    <Tab classes={{ root: classes.tabRoot }} label="Информация" />
+                                    <Tab classes={{ root: classes.tabRoot }} label="Правила" />
                                 </Tabs>
                             </CardActions>
                         </div>

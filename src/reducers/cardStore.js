@@ -27,7 +27,6 @@ const cardStore = (state = initialState, action) => {
             return Object.assign({}, state, {
                 data: action.payload,
                 meta: Object.assign({}, state.meta, {
-                    isFetching: false,
                     updated: Date.now(),
                 }),
             });

@@ -11,7 +11,7 @@ export default (theme) => ({
         fontFamily: 'Russo One',
     },
     navIconHide: {
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('lg')]: {
             display: 'none',
         },
     },

@@ -2,11 +2,11 @@
 import { connect } from 'react-redux';
 
 // actions
-import { fetchRuleList } from "../actions/rule";
-import { fetchRuleTypeList } from "../actions/ruleType";
-import { fetchActionList } from "../actions/action";
-import { fetchHandlerList } from "../actions/handler";
-import { deleteRemoteRuleCardStore } from "../actions/ruleCardStore";
+import { remoteFetchRuleList } from "../actions/rule";
+import { remoteFetchRuleTypeList } from "../actions/ruleType";
+import { remoteFetchActionList } from "../actions/action";
+import { remoteFetchHandlerList } from "../actions/handler";
+import { remoteDeleteRuleCardStore } from "../actions/ruleCardStore";
 
 // component
 import JCardRule from '../components/JCardRule';
@@ -19,11 +19,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onFetchRuleList: () => dispatch(fetchRuleList()),
-    onFetchRuleTypeList: () => dispatch(fetchRuleTypeList()),
-    onFetchActionList: () => dispatch(fetchActionList()),
-    onFetchHandlerList: () => dispatch(fetchHandlerList()),
-    onDeleteRuleCardStore: (id) => dispatch(deleteRemoteRuleCardStore(id)),
+    onRemoteFetchRuleList: () => dispatch(remoteFetchRuleList()),
+    onRemoteFetchRuleTypeList: () => dispatch(remoteFetchRuleTypeList()),
+    onRemoteFetchActionList: () => dispatch(remoteFetchActionList()),
+    onRemoteFetchHandlerList: () => dispatch(remoteFetchHandlerList()),
+    onRemoteDeleteRuleCardStore: (id) => dispatch(remoteDeleteRuleCardStore(id)),
 });
 
 const JCardRuleContainer = connect(

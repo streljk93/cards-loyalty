@@ -12,10 +12,10 @@ import * as Icons from '@material-ui/icons';
 class JCardRule extends React.Component {
 
     componentDidMount() {
-        this.props.onFetchRuleList();
-        this.props.onFetchRuleTypeList();
-        this.props.onFetchActionList();
-        this.props.onFetchHandlerList();
+        this.props.onRemoteFetchRuleList();
+        this.props.onRemoteFetchRuleTypeList();
+        this.props.onRemoteFetchActionList();
+        this.props.onRemoteFetchHandlerList();
     }
 
     renderEdit({ rule, action, handler }) {
@@ -48,7 +48,7 @@ class JCardRule extends React.Component {
                     </Typography>
                 </TableCell>
                 <TableCell style={{ padding: 0 }}>
-                    <IconButton onClick={() => this.props.onDeleteRuleCardStore(id)}>
+                    <IconButton onClick={() => this.props.onRemoteDeleteRuleCardStore(id)}>
                         <Icons.Delete />
                     </IconButton>
                 </TableCell>

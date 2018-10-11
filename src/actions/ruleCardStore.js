@@ -29,7 +29,7 @@ function responseMetaRuleCardStore() {
     };
 }
 
-export function fetchRuleCardStoreList () {
+export function remoteFetchRuleCardStoreList () {
     return (dispatch, getState) => {
 
         const { ruleCardStore, account } = getState();
@@ -58,7 +58,7 @@ export function fetchRuleCardStoreList () {
     };
 }
 
-export function deleteRemoteRuleCardStore (id) {
+export function remoteDeleteRuleCardStore (id) {
     return (dispatch, getState) => {
 
         const { account } = getState();
