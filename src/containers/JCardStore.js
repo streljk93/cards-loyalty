@@ -23,7 +23,7 @@ import moment from 'moment';
 import { updateCardStoreField, remoteSyncCardStore } from "../actions/cardStore";
 
 import JCardRules from './JCardRules';
-import JDialogAddRules from '../components/JDialogAddRules';
+import JDialogAddRules from './JDialogAddRules';
 import JDialogMedia from './JDialogMedia';
 import styles from '../styles/JCardStoreStyles';
 
@@ -350,6 +350,12 @@ class JCardStore extends React.Component {
                     {cardTab === 1 && (editing
                         ? this.renderFooterRulesEdit()
                         : this.renderFooter())}
+                    {/*{cardTab === 1 && (editing*/}
+                        {/*? this.renderFooterInfoEdit()*/}
+                        {/*: this.renderFooter())}*/}
+                    {/*{cardTab === 0 && (editing*/}
+                        {/*? this.renderFooter()*/}
+                        {/*: this.renderFooterRulesEdit())}*/}
                 </Card>
             </Grid>
         );

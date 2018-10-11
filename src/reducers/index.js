@@ -9,6 +9,7 @@ import ruleType from './ruleType';
 import action from './action';
 import handler from './handler';
 import ruleCardStore from './ruleCardStore';
+import ruleCardType from './ruleCardType';
 import media from './media';
 
 export default combineReducers({
@@ -22,5 +23,6 @@ export default combineReducers({
     action,
     handler,
     ruleCardStore,
+    ruleCardType,
     media,
 });

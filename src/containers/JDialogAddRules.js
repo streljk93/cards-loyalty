@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     Dialog,
     DialogContent,
@@ -6,6 +7,10 @@ import {
     DialogTitle,
     DialogActions,
     Button,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
     withMobileDialog,
     withStyles,
 } from '@material-ui/core';
@@ -20,6 +25,7 @@ class JDialogAddRules extends React.Component {
         super(props);
 
         this.state = {
+            rule: '',
             open: false,
         };
     }
@@ -50,14 +56,22 @@ class JDialogAddRules extends React.Component {
                 <Dialog
                     fullScreen={fullScreen}
                     open={this.state.open}
+                    // open={true}
                     onClose={this.onClose.bind(this)}
                     area-labelledby='dialogAddRules'>
                     <DialogTitle id='dialogAddRules'>
-                        Title
+                        Новое правило
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad eaque fuga illo mollitia odit? Adipisci atque facere laudantium non nulla officiis quae. Atque aut consequuntur dolorem nemo, nesciunt nihil voluptatibus?
+                            <FormControl fullWidth>
+                                <InputLabel htmlFor='rules'>Label</InputLabel>
+                                <Select value={this.state.rule}>
+                                    <MenuItem value={1}>Lorem ipsum dolor sit amet.</MenuItem>
+                                    <MenuItem value={2}>Lorem ipsum dolor sit amet.</MenuItem>
+                                    <MenuItem value={3}>Lorem ipsum dolor sit amet.</MenuItem>
+                                </Select>
+                            </FormControl>
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
@@ -73,5 +87,15 @@ class JDialogAddRules extends React.Component {
 
 JDialogAddRules = withStyles(styles, { withTheme: true })(JDialogAddRules);
 JDialogAddRules = withMobileDialog({ breakpoint: 'xs' })(JDialogAddRules);
+JDialogAddRules = connect(
+    state => ({
+        action: state.action.data,
+        handler: state.handler.data,
+        rule: state.rule.data,
+        ruleCardStore: state.ruleCardStore.data,
+        ruleCardType: state.ruleCardType.data,
+    }),
+    null
+)(JDialogAddRules);
 
 export default JDialogAddRules;

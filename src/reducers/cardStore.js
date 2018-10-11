@@ -9,14 +9,21 @@ const initialState = {
 const cardStore = (state = initialState, action) => {
     switch (action.type) {
 
-        case 'REQUEST_CARD_STORE_LIST':
+        case 'REQUEST_CARD_STORE':
             return Object.assign({}, state, {
                 meta: Object.assign({}, state.meta, {
                     isFetching: true,
                 }),
             });
 
-        case 'RESPONSE_CARD_STORE_LIST':
+        case 'RESPONSE_CARD_STORE':
+            return Object.assign({}, state, {
+                meta: Object.assign({}, state.meta, {
+                    isFetching: false,
+                })
+            });
+
+        case 'SYNC_CARD_STORE_LIST':
             return Object.assign({}, state, {
                 data: action.payload,
                 meta: Object.assign({}, state.meta, {
@@ -25,7 +32,7 @@ const cardStore = (state = initialState, action) => {
                 }),
             });
 
-        case 'ADD_CARD_STORE':
+        case 'CREATE_CARD_STORE':
             return Object.assign({}, state, {
                 data: [...state.data, {
                     ...action.payload,
@@ -42,42 +49,9 @@ const cardStore = (state = initialState, action) => {
                 }),
             });
 
-        // case 'EDIT_CARD_STORE':
-        //     return Object.assign({}, state, {
-        //         data: state.data.map(card => {
-        //             if (card.id === action.payload) {
-        //                 card.editing = true;
-        //             }
-        //             return card;
-        //         })
-        //     });
-        //
-        // case 'CANCEL_EDIT_CARD_STORE':
-        //     return Object.assign({}, state, {
-        //         data: state.data.map(card => {
-        //             if (card.id === action.payload) {
-        //                 card.editing = false;
-        //             }
-        //             return card;
-        //         })
-        //     });
-
         case 'DELETE_CARD_STORE':
             return Object.assign({}, state, {
                 data: state.data.filter(card => card.id !== action.payload),
-            });
-
-        case 'RESPONSE_CARD_STORE':
-            return Object.assign({}, state, {
-                data: state.data.map(card => {
-                    if (card.id === action.payload.id) {
-                        return {...card, ...action.payload};
-                    }
-                    return card;
-                }),
-                meta: Object.assign({}, state.meta, {
-                    isFetching: false,
-                })
             });
 
         default:

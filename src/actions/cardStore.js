@@ -5,39 +5,51 @@ import { checkExpiryDate } from "../libraries/helpers";
 import { startCommonLoader, stopCommonLoader } from "./ui";
 import config from "../config";
 
-function requestCardStoreList () {
+function makeCardStore (data) {
     return {
-        type: 'REQUEST_CARD_STORE_LIST',
+        id: data.id || uuid(),
+        card_type_id: data.card_type_id || null,
+        store_id: data.store_id || null,
+        image: data.image,
+        name: data.name,
+        description: data.description,
+        isactive: (data.isactive !== undefined) ? data.isactive : null,
+        lastupdated: data.lastupdated || moment().format('YYYY-MM-DD HH:mm:ss'),
     };
 }
 
-function createCardStore ({ card_type_id, site_id, image, name, description }) {
+function requestCardStore () {
     return {
-        type: 'ADD_CARD_STORE',
-        payload: {
-            id: uuid(),
-            card_type_id,
-            site_id,
-            image,
-            name,
-            description,
-            isactive: null,
-            lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
-        },
+        type: 'REQUEST_CARD_STORE',
     };
 }
 
-function updateCardStore ({ id, image, name, description }) {
+function responseCardStore () {
     return {
-        type: 'CHANGE_CARD_STORE',
-        payload: {
-            id,
-            image,
-            name,
-            description,
-            isactive: null,
-            lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
-        },
+        type: 'RESPONSE_CARD_STORE',
+    };
+}
+
+function syncCardStoreList (cardStoreList) {
+    return {
+        type: 'SYNC_CARD_STORE_LIST',
+        payload: cardStoreList,
+    };
+}
+
+function createCardStore (data) {
+    const cardStore = makeCardStore(data);
+    return {
+        type: 'CREATE_CARD_STORE',
+        payload: cardStore,
+    };
+}
+
+function updateCardStore (data) {
+    const cardStore = makeCardStore(data);
+    return {
+        type: 'UPDATE_CARD_STORE',
+        payload: cardStore,
     };
 }
 
@@ -50,41 +62,6 @@ export function updateCardStoreField (id, field, value) {
             isactive: null,
             lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
         },
-    };
-}
-
-// export function editCardStore (id) {
-//     return {
-//         type: 'EDIT_CARD_STORE',
-//         payload: id,
-//     };
-// }
-//
-// export function cancelEditCardStore(id) {
-//     return {
-//         type: 'CANCEL_EDIT_CARD_STORE',
-//         payload: id,
-//     };
-// }
-
-// function deleteCardStore (id) {
-//     return {
-//         type: 'DELETE_CARD_STORE',
-//         payload: id,
-//     };
-// }
-
-function responseCardStoreList (cardStoreList) {
-    return {
-        type: 'RESPONSE_CARD_STORE_LIST',
-        payload: cardStoreList,
-    };
-}
-
-function responseCardStore (cardStore) {
-    return {
-        type: 'RESPONSE_CARD_STORE',
-        payload: cardStore,
     };
 }
 
@@ -102,7 +79,7 @@ export function remoteSaveCardStore (id, { card_type_id, store_id, image, name, 
         const { account } = getState();
 
         dispatch(action);
-        dispatch(requestCardStoreList());
+        dispatch(requestCardStore());
 
         return fetch(url, {
             method,
@@ -115,11 +92,12 @@ export function remoteSaveCardStore (id, { card_type_id, store_id, image, name, 
             .then(response => response.json())
             .then(data => {
                 if (!data.success) data.errors.map(error => dispatch(addError('Сохранение карты', error)));
-                dispatch(responseCardStore(data.success ? data.info : {}));
+                dispatch(responseCardStore());
+                dispatch(updateCardStore(data.success ? data.info : {}))
             })
             .catch(error => {
                 dispatch(addError('Сохранение карты', error.message));
-                dispatch(responseCardStore({}));
+                dispatch(responseCardStore());
             });
     }
 }
@@ -130,7 +108,7 @@ export function remoteFetchCardStoreList () {
         const { cardStore, account } = getState();
         if (checkExpiryDate(cardStore.meta.updated)) return null;
 
-        dispatch(requestCardStoreList());
+        dispatch(requestCardStore());
         dispatch(startCommonLoader());
 
         return fetch(`${config.api}/loyality/card-store`, {
@@ -141,12 +119,13 @@ export function remoteFetchCardStoreList () {
         })
             .then(response => response.json())
             .then(data => {
-                dispatch(responseCardStoreList(data.info));
+                if (data.success) dispatch(syncCardStoreList(data.info));
+                dispatch(responseCardStore());
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
-                addError(error);
-                dispatch(responseCardStoreList([]));
+                dispatch(addError('Получение магазинных карт', error.message));
+                dispatch(responseCardStore());
                 dispatch(stopCommonLoader());
             });
 
