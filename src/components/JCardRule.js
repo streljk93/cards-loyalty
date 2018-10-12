@@ -1,13 +1,20 @@
 import React from 'react';
 import {
     Typography,
-    TableCell,
-    TableRow,
-    IconButton,
-    // Select,
-    // TextField,
+    ExpansionPanel,
+    ExpansionPanelSummary,
+    ExpansionPanelDetails,
+    ExpansionPanelActions,
+    Button,
+    TextField,
+    Select,
+    MenuItem,
+    withStyles,
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
+
+// own components
+import styles from '../styles/JCardRuleStyles';
 
 class JCardRule extends React.Component {
 
@@ -18,76 +25,19 @@ class JCardRule extends React.Component {
         this.props.onRemoteFetchHandlerList();
     }
 
-    renderEdit({ rule, action, handler }) {
-        const { id, value, result } = this.props;
-        return (
-            <TableRow>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ fontSize: '12px' }}>
-                        {this.props.sign}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ paddingLeft: '5px', fontSize: '12px' }}>
-                        {action ? action.name : ''}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ paddingLeft: '5px', fontSize: '12px' }}>
-                        {this.props.value ? `(${value})` : ''}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ textAlign: 'center', fontSize: '12px' }}>
-                        {handler ? handler.name : ''}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ fontSize: '12px' }}>
-                        {this.props.result ? `(${result})` : ''}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <IconButton onClick={() => this.props.onRemoteDeleteRuleCardStore(id)}>
-                        <Icons.Delete />
-                    </IconButton>
-                </TableCell>
-            </TableRow>
-        );
-    }
-    renderView({ rule, action, handler }) {
-        return (
-            <TableRow>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ fontSize: '12px' }}>
-                        {this.props.sign}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ paddingLeft: '5px', fontSize: '12px' }}>
-                        {action ? action.name : ''}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ paddingLeft: '5px', fontSize: '12px' }}>
-                        {this.props.value ? `(${this.props.value})` : ''}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ textAlign: 'center', fontSize: '12px' }}>
-                        {handler ? handler.name : ''}
-                    </Typography>
-                </TableCell>
-                <TableCell style={{ padding: 0 }}>
-                    <Typography color='textSecondary' style={{ fontSize: '12px' }}>
-                        {this.props.result ? `(${this.props.result})` : ''}
-                    </Typography>
-                </TableCell>
-            </TableRow>
-        );
+    makeTextForRead(text) {
+        if (!text) return '';
+        else return text.split(' ').map(text => {
+            if (text.length > 8) {
+                text = text.slice(0, 8);
+                text += '.';
+            }
+            return text;
+        }).join(' ');
     }
 
     render() {
+        const { classes, value, result, editing } = this.props;
         const rule = this.props.rule.data
             ? this.props.rule.data.filter(rule => rule.id === this.props.ruleId)[0]
             : {};
@@ -99,10 +49,118 @@ class JCardRule extends React.Component {
             : {};
         // const ruleType = this.props.ruleType.data.filter(ruleType => ruleType.id === rule.rule_type_id)[0];
 
-        if (this.props.editing) return this.renderEdit({ rule, action, handler });
-        return this.renderView({ rule, action, handler });
+        return (
+            <ExpansionPanel onChange={() => console.log('change2')}>
+                <ExpansionPanelSummary expandIcon={<Icons.ExpandMore />}>
+                    <div className={classes.field}>
+                        <Typography className={classes.typography}>
+                            {action ? this.makeTextForRead(action.name) : ''}
+                        </Typography>
+                    </div>
+                    <div className={classes.sign}>
+                        <Icons.ArrowForward style={{
+                            fontSize: 14,
+                            paddingLeft: '18.5px',
+                            paddingRight: '18.5px' }}
+                        />
+                    </div>
+                    <div className={classes.field}>
+                        <Typography className={classes.typography}>
+                            {handler ? this.makeTextForRead(handler.name) : ''}
+                        </Typography>
+                    </div>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails style={{ paddingTop: 0, paddingBottom: 14 }}>
+                    <div className={classes.field}>
+                        <Select
+                            value={2}
+                            classes={{
+                                icon: classes.selectIcon,
+                                select: classes.select
+                            }}
+                            className={classes.selectField}
+                            disabled={!editing}
+                            disableUnderline={true}
+                            onChange={(target, value) => console.log(target, value)}>
+                            <MenuItem value={1}>&gt;</MenuItem>
+                            <MenuItem value={2}>&gt;=</MenuItem>
+                            <MenuItem value={3}>=</MenuItem>
+                            <MenuItem value={4}>&lt;=</MenuItem>
+                            <MenuItem value={5}>&lt;</MenuItem>
+                        </Select>
+                    </div>
+                    <div style={{ width: 51 }} />
+                    <div className={classes.field}>
+                        <Select
+                            value={3}
+                            classes={{
+                                icon: classes.selectIcon,
+                                select: classes.select
+                            }}
+                            className={classes.selectField}
+                            disabled
+                            disableUnderline={true}
+                            onChange={(target, value) => console.log(target, value)}>
+                            <MenuItem value={1}>&gt;</MenuItem>
+                            <MenuItem value={2}>&gt;=</MenuItem>
+                            <MenuItem value={3}>=</MenuItem>
+                            <MenuItem value={4}>&lt;=</MenuItem>
+                            <MenuItem value={5}>&lt;</MenuItem>
+                        </Select>
+                    </div>
+                    <div style={{ width: 32 }} />
+                </ExpansionPanelDetails>
+                <ExpansionPanelDetails>
+                    <div className={classes.field}>
+                        <TextField
+                            value={value}
+                            onChange={(target, value) => console.log(target, value)}
+                            margin="normal"
+                            variant="outlined"
+                            classes={{ root: classes.textFieldRoot }}
+                            disabled={!editing}
+                        />
+                    </div>
+                    <div className={classes.sign}>
+                        <Icons.ArrowForward style={{
+                            fontSize: 14,
+                            paddingLeft: '18.5px',
+                            paddingRight: '18.5px' }}
+                        />
+                    </div>
+                    <div className={classes.field}>
+                        <TextField
+                            value={result}
+                            onChange={(target, value) => console.log(target, value)}
+                            margin="normal"
+                            variant="outlined"
+                            classes={{ root: classes.textFieldRoot }}
+                            disabled={!editing}
+                        />
+                    </div>
+                    <div style={{ width: 32 }} />
+                </ExpansionPanelDetails>
+                {editing && (
+                    <div>
+                        {/*<Divider />*/}
+                        <ExpansionPanelActions>
+                            <Button
+                                size='small'
+                                color='secondary'
+                                // variant='outlined'
+                                style={{ flex: 1, marginLeft: 0 }}
+                                fullWidth>
+                                <Icons.Delete />
+                                Удалить
+                            </Button>
+                        </ExpansionPanelActions>
+                    </div>
+                )}
+            </ExpansionPanel>
+        );
     }
 
 }
 
+JCardRule = withStyles(styles, { withTheme: true })(JCardRule);
 export default JCardRule;
