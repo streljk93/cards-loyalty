@@ -13,19 +13,28 @@ const ruleCardStore = (state = initialState, action) => {
                 }),
             });
 
-        case 'RESPONSE_RULE_CARD_STORE_LIST':
+        case 'RESPONSE_RULE_CARD_STORE':
+            return Object.assign({}, state, {
+                meta: Object.assign({}, state.meta, {
+                    isFetching: false,
+                }),
+            });
+
+        case 'SYNC_RULE_CARD_STORE_LIST':
             return Object.assign({}, state, {
                 data: action.payload,
                 meta: Object.assign({}, state.meta, {
-                    isFetching: false,
                     updated: Date.now(),
                 }),
             });
 
-        case 'RESPONSE_META_RULE_CARD_STORE':
+        case 'UPDATE_RULE_CARD_STORE_FIELD':
             return Object.assign({}, state, {
-                meta: Object.assign({}, state.meta, {
-                    isFetching: false,
+                data: state.data.map(rule => {
+                    if (rule.id === action.payload.id) {
+                        return { ...rule, ...action.payload };
+                    }
+                    return rule;
                 }),
             });
 

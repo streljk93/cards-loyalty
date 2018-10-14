@@ -8,3 +8,7 @@ export function checkExpiryDate(microsec) {
 
     return result;
 }
+
+export function getSignList () {
+    return ['<', '<=', '=', '>=', '>'];
+}

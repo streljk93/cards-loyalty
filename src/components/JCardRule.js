@@ -12,6 +12,7 @@ import {
     withStyles,
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
+import { getSignList } from '../libraries/helpers';
 
 // own components
 import styles from '../styles/JCardRuleStyles';
@@ -73,39 +74,35 @@ class JCardRule extends React.Component {
                 <ExpansionPanelDetails style={{ paddingTop: 0, paddingBottom: 14 }}>
                     <div className={classes.field}>
                         <Select
-                            value={2}
+                            value='<'
                             classes={{
                                 icon: classes.selectIcon,
-                                select: classes.select
+                                select: editing ? classes.selectEditing : classes.select,
                             }}
                             className={classes.selectField}
                             disabled={!editing}
                             disableUnderline={true}
-                            onChange={(target, value) => console.log(target, value)}>
-                            <MenuItem value={1}>&gt;</MenuItem>
-                            <MenuItem value={2}>&gt;=</MenuItem>
-                            <MenuItem value={3}>=</MenuItem>
-                            <MenuItem value={4}>&lt;=</MenuItem>
-                            <MenuItem value={5}>&lt;</MenuItem>
+                            onChange={(target, value) => console.log(target.target.value, value)}>
+                            {getSignList().map(sign =>
+                                <MenuItem value={sign}>{sign}</MenuItem>
+                            )}
                         </Select>
                     </div>
                     <div style={{ width: 51 }} />
                     <div className={classes.field}>
                         <Select
-                            value={3}
+                            value='='
                             classes={{
                                 icon: classes.selectIcon,
-                                select: classes.select
+                                select: editing ? classes.selectEditing : classes.select,
                             }}
                             className={classes.selectField}
-                            disabled
+                            disabled={!editing}
                             disableUnderline={true}
                             onChange={(target, value) => console.log(target, value)}>
-                            <MenuItem value={1}>&gt;</MenuItem>
-                            <MenuItem value={2}>&gt;=</MenuItem>
-                            <MenuItem value={3}>=</MenuItem>
-                            <MenuItem value={4}>&lt;=</MenuItem>
-                            <MenuItem value={5}>&lt;</MenuItem>
+                            {getSignList().map(sign =>
+                                <MenuItem value={sign}>{sign}</MenuItem>
+                            )}
                         </Select>
                     </div>
                     <div style={{ width: 32 }} />
@@ -117,7 +114,7 @@ class JCardRule extends React.Component {
                             onChange={(target, value) => console.log(target, value)}
                             margin="normal"
                             variant="outlined"
-                            classes={{ root: classes.textFieldRoot }}
+                            classes={{ root: editing ? classes.textFieldRootEditing : classes.textFieldRoot }}
                             disabled={!editing}
                         />
                     </div>
@@ -134,7 +131,7 @@ class JCardRule extends React.Component {
                             onChange={(target, value) => console.log(target, value)}
                             margin="normal"
                             variant="outlined"
-                            classes={{ root: classes.textFieldRoot }}
+                            classes={{ root: editing ? classes.textFieldRootEditing : classes.textFieldRoot }}
                             disabled={!editing}
                         />
                     </div>
