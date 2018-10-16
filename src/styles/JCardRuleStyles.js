@@ -1,6 +1,6 @@
 export default theme => ({
     typography: {
-        fontSize: 12,
+        fontSize: 14,
     },
     field: {
         display: 'flex',

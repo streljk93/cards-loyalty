@@ -102,6 +102,23 @@ export function remoteSaveCardStore (id, { card_type_id, store_id, image, name, 
     }
 }
 
+let time = null;
+export function remoteUpdateCardStoreField (id, field, value) {
+    return (dispatch, getState) => {
+
+
+        dispatch(updateCardStoreField(id, field, value));
+
+        const { cardStore } = getState();
+
+        clearInterval(time);
+        time = setInterval(() => {
+            dispatch(remoteSaveCardStore(id, cardStore.data.filter(card => card.id === id).shift()));
+            clearInterval(time);
+        }, 3000);
+    }
+}
+
 export function remoteFetchCardStoreList () {
     return (dispatch, getState) => {
 
@@ -130,14 +147,4 @@ export function remoteFetchCardStoreList () {
             });
 
     };
-}
-
-export function remoteSyncCardStore (id) {
-    return (dispatch, getState) => {
-        const { cardStore } = getState();
-
-        cardStore.data.forEach(card =>
-            (card.id === id && card.isactive === null) && dispatch(remoteSaveCardStore(card.id, card))
-        );
-    }
 }

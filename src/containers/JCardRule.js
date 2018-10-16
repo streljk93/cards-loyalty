@@ -6,7 +6,7 @@ import { remoteFetchRuleList } from "../actions/rule";
 import { remoteFetchRuleTypeList } from "../actions/ruleType";
 import { remoteFetchActionList } from "../actions/action";
 import { remoteFetchHandlerList } from "../actions/handler";
-import { remoteDeleteRuleCardStore } from "../actions/ruleCardStore";
+import { remoteDeleteRuleCardStore, remoteUpdateRuleCardStoreField } from "../actions/ruleCardStore";
 
 // component
 import JCardRule from '../components/JCardRule';
@@ -23,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
     onRemoteFetchRuleTypeList: () => dispatch(remoteFetchRuleTypeList()),
     onRemoteFetchActionList: () => dispatch(remoteFetchActionList()),
     onRemoteFetchHandlerList: () => dispatch(remoteFetchHandlerList()),
+    onRemoteUpdateField: (id, field, value) => dispatch(remoteUpdateRuleCardStoreField(id, field, value)),
     onRemoteDeleteRuleCardStore: (id) => dispatch(remoteDeleteRuleCardStore(id)),
 });
 

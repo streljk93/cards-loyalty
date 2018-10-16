@@ -37,10 +37,26 @@ class JCardRule extends React.Component {
         }).join(' ');
     }
 
+    onUpdateField(field, value) {
+        this.props.onRemoteUpdateField(this.props.id, field, value);
+    }
+
+    onUpdateValue(value) {
+        this.onUpdateField('value', value);
+    }
+
+    onUpdateResult(value) {
+        this.onUpdateField('result', value);
+    }
+
+    onUpdateSign(value) {
+        this.onUpdateField('sign', value);
+    }
+
     render() {
-        const { classes, value, result, editing } = this.props;
+        const { classes, id, ruleId, value, result, editing, onRemoteDeleteRuleCardStore } = this.props;
         const rule = this.props.rule.data
-            ? this.props.rule.data.filter(rule => rule.id === this.props.ruleId)[0]
+            ? this.props.rule.data.filter(rule => rule.id === ruleId)[0]
             : {};
         const action = this.props.action.data && rule
             ? this.props.action.data.filter(action => action.id === rule.action_id)[0]
@@ -49,8 +65,7 @@ class JCardRule extends React.Component {
             ? this.props.handler.data.filter(handler => handler.id === rule.handler_id)[0]
             : {};
         // const ruleType = this.props.ruleType.data.filter(ruleType => ruleType.id === rule.rule_type_id)[0];
-
-        return (
+        if (rule) return (
             <ExpansionPanel onChange={() => console.log('change2')}>
                 <ExpansionPanelSummary expandIcon={<Icons.ExpandMore />}>
                     <div className={classes.field}>
@@ -74,17 +89,17 @@ class JCardRule extends React.Component {
                 <ExpansionPanelDetails style={{ paddingTop: 0, paddingBottom: 14 }}>
                     <div className={classes.field}>
                         <Select
-                            value='<'
+                            value={rule.sign}
                             classes={{
                                 icon: classes.selectIcon,
-                                select: editing ? classes.selectEditing : classes.select,
+                                select: classes.select,
                             }}
                             className={classes.selectField}
-                            disabled={!editing}
+                            disabled={true}
                             disableUnderline={true}
-                            onChange={(target, value) => console.log(target.target.value, value)}>
-                            {getSignList().map(sign =>
-                                <MenuItem value={sign}>{sign}</MenuItem>
+                            onChange={({ target: { value }}) => this.onUpdateSign(value)}>
+                            {getSignList().map((sign, i) =>
+                                <MenuItem key={i} value={sign}>{sign}</MenuItem>
                             )}
                         </Select>
                     </div>
@@ -94,14 +109,14 @@ class JCardRule extends React.Component {
                             value='='
                             classes={{
                                 icon: classes.selectIcon,
-                                select: editing ? classes.selectEditing : classes.select,
+                                select: classes.select,
                             }}
                             className={classes.selectField}
-                            disabled={!editing}
+                            disabled={true}
                             disableUnderline={true}
                             onChange={(target, value) => console.log(target, value)}>
-                            {getSignList().map(sign =>
-                                <MenuItem value={sign}>{sign}</MenuItem>
+                            {getSignList().map((sign, i) =>
+                                <MenuItem key={i} value={sign}>{sign}</MenuItem>
                             )}
                         </Select>
                     </div>
@@ -110,12 +125,16 @@ class JCardRule extends React.Component {
                 <ExpansionPanelDetails>
                     <div className={classes.field}>
                         <TextField
-                            value={value}
-                            onChange={(target, value) => console.log(target, value)}
+                            value={value || ''}
+                            onChange={({ target: { value }}) => this.onUpdateValue(value)}
                             margin="normal"
                             variant="outlined"
-                            classes={{ root: editing ? classes.textFieldRootEditing : classes.textFieldRoot }}
-                            disabled={!editing}
+                            classes={{
+                                root: (editing && rule.action_isfill)
+                                    ? classes.textFieldRootEditing
+                                    : classes.textFieldRoot
+                            }}
+                            disabled={!editing || !rule.action_isfill}
                         />
                     </div>
                     <div className={classes.sign}>
@@ -127,12 +146,16 @@ class JCardRule extends React.Component {
                     </div>
                     <div className={classes.field}>
                         <TextField
-                            value={result}
-                            onChange={(target, value) => console.log(target, value)}
+                            value={result || ''}
+                            onChange={({ target: { value }}) => this.onUpdateResult(value)}
                             margin="normal"
                             variant="outlined"
-                            classes={{ root: editing ? classes.textFieldRootEditing : classes.textFieldRoot }}
-                            disabled={!editing}
+                            classes={{
+                                root: (editing && rule.handler_isfill)
+                                    ? classes.textFieldRootEditing
+                                    : classes.textFieldRoot
+                            }}
+                            disabled={!editing || !rule.handler_isfill}
                         />
                     </div>
                     <div style={{ width: 32 }} />
@@ -146,6 +169,7 @@ class JCardRule extends React.Component {
                                 color='secondary'
                                 // variant='outlined'
                                 style={{ flex: 1, marginLeft: 0 }}
+                                onClick={() => onRemoteDeleteRuleCardStore(id)}
                                 fullWidth>
                                 <Icons.Delete />
                                 Удалить
@@ -155,6 +179,7 @@ class JCardRule extends React.Component {
                 )}
             </ExpansionPanel>
         );
+        return (<div></div>);
     }
 
 }

@@ -1,6 +1,8 @@
 import React from "react";
 
+// own components
 import JCardRule from '../containers/JCardRule';
+import JCardRuleAdd from '../components/JCardRuleAdd';
 
 class JCardRules extends React.Component {
 
@@ -9,20 +11,23 @@ class JCardRules extends React.Component {
     }
 
     render() {
-        const ruleCS = this.props.ruleCardStore.data.filter(rule => rule.card_store_id === this.props.cardId);
+        const { cardId, ruleCardStore, editing } = this.props;
+        const ruleCS = ruleCardStore.data.filter(rule => rule.card_store_id === cardId);
+
         return (
             <div>
                 {ruleCS && ruleCS.map((rule, i) =>
                     <JCardRule
                         key={i}
                         id={rule.id}
+                        cardStoreId={rule.card_store_id}
                         ruleId={rule.rule_id}
-                        sign={rule.sign}
                         value={rule.value}
                         result={rule.result}
-                        editing={this.props.editing}
+                        editing={editing}
                     />
                 )}
+                {editing && <JCardRuleAdd />}
             </div>
         )
     }

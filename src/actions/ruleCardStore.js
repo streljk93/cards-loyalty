@@ -10,7 +10,6 @@ function makeRuleCardStore (data) {
         id: data.id || uuid(),
         card_store_id: data.card_store_id,
         rule_id: data.rule_id,
-        sign: data.sign,
         value: data.value,
         result: data.result,
         isactive: (data.isactive !== undefined) ? data.isactive : null,
@@ -44,12 +43,23 @@ function syncRuleCardStoreList (ruleCardStoreList) {
     };
 }
 
+function updateRuleCardStore (data) {
+    const ruleCardStore = makeRuleCardStore(data);
+
+    return {
+        type: 'UPDATE_RULE_CARD_STORE',
+        payload: ruleCardStore,
+    };
+}
+
 function updateRuleCardStoreField (id, field, value) {
     return {
-        type: 'UPDATE_RULE_CARD_STORE_FIELD',
+        type: 'UPDATE_RULE_CARD_STORE',
         payload: {
             id,
             [field]: value,
+            isactive: null,
+            lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
         },
     };
 }
@@ -103,9 +113,16 @@ export function remoteUpdateRuleCardStore (data) {
         })
             .then(response => response.json())
             .then(data => {
-                // if (data.success) dispatch(updateRuleCardStore(data.info));
-                // dispatch(responseRuleCardStore());
+                if (data.success) dispatch(updateRuleCardStore(data.info));
+                else data.errors.map(error => dispatch(addError('Обновление правил у карты', error)));
+                dispatch(responseRuleCardStore());
+                dispatch(stopCommonLoader());
             })
+            .catch(error => {
+                dispatch(addError('Обновление правил у карты', error.message()));
+                dispatch(responseRuleCardStore());
+                dispatch(stopCommonLoader());
+            });
 
     }
 }
@@ -116,8 +133,7 @@ export function remoteUpdateRuleCardStoreField (id, field, value) {
         dispatch(updateRuleCardStoreField(id, field, value));
         const { ruleCardStore } = getState();
 
-        remoteUpdateRuleCardStore(ruleCardStore.filter(rule => rule.id === id).shift());
-
+        dispatch(remoteUpdateRuleCardStore(ruleCardStore.data.filter(rule => rule.id === id).shift()));
     }
 }
 
@@ -137,10 +153,15 @@ export function remoteDeleteRuleCardStore (id) {
         })
             .then(response => response.json())
             .then(data => {
+                if (data.success) dispatch(deleteRuleCardStore(id));
+                else data.errors.forEach(error => dispatch(addError('Удаление правила', error)));
                 dispatch(responseRuleCardStore());
                 dispatch(stopCommonLoader());
-                if (data.success) dispatch(deleteRuleCardStore(id));
-                else addError('Удаление правила', 'Правило не было удалено');
+            })
+            .catch(error => {
+                dispatch(addError('Уадление правила', error.message()));
+                dispatch(responseRuleCardStore());
+                dispatch(stopCommonLoader());
             });
     };
 }

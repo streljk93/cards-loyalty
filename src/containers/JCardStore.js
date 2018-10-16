@@ -15,15 +15,13 @@ import {
     TextField,
     withStyles,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import * as Icons from '@material-ui/icons';
 import moment from 'moment';
 
 // actions
-import { updateCardStoreField, remoteSyncCardStore } from "../actions/cardStore";
+import { remoteUpdateCardStoreField } from "../actions/cardStore";
 
 import JCardRules from './JCardRules';
-import JDialogAddRules from './JDialogAddRules';
 import JDialogMedia from './JDialogMedia';
 import styles from '../styles/JCardStoreStyles';
 
@@ -42,20 +40,6 @@ class JCardStore extends React.Component {
         };
     }
 
-    componentWillUpdate(props) {
-        this.onSync(props);
-    }
-
-    onSync(props) {
-        if (props.isactive === null) {
-            clearInterval(this.time);
-            this.time = setInterval(() => {
-                this.props.onRemoteSync(props.id);
-                clearInterval(this.time);
-            }, 3000);
-        }
-    }
-
     onChangeTab(value) {
         this.setState({
             tab: value,
@@ -71,7 +55,7 @@ class JCardStore extends React.Component {
     }
 
     onRemoteUpdateField(field, value) {
-        this.props.onUpdateField(this.props.id, field, value);
+        this.props.onRemoteUpdateField(this.props.id, field, value);
     }
 
     onEditName({ target: { value }}) {
@@ -259,7 +243,7 @@ class JCardStore extends React.Component {
         );
     }
 
-    renderFooterInfoEdit() {
+    renderFooterEdit() {
         // const { isLoading } = this.props;
         return (
             <CardActions>
@@ -281,34 +265,34 @@ class JCardStore extends React.Component {
         );
     }
 
-    renderFooterRulesEdit() {
-        // const { classes, isLoading } = this.props;
-        const { classes } = this.props;
-        return (
-            <CardActions>
-                <Grid container>
-                    <Grid item xs={6}>
-                        <Link to={'/cards'}>
-                            <Button
-                                className={classes.cardActionLeft}
-                                variant='outlined'
-                                size='small'
-                                color='primary'
-                                // disabled={isLoading}
-                                onClick={this.onCancel.bind(this)}
-                                fullWidth>
-                                <Icons.ArrowBackIos />
-                                назад
-                            </Button>
-                        </Link>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <JDialogAddRules classButton={classes.cardActionRight} />
-                    </Grid>
-                </Grid>
-            </CardActions>
-        );
-    }
+    // renderFooterRulesEdit() {
+    //     // const { classes, isLoading } = this.props;
+    //     const { classes } = this.props;
+    //     return (
+    //         <CardActions>
+    //             <Grid container>
+    //                 <Grid item xs={6}>
+    //                     <Link to={'/cards'}>
+    //                         <Button
+    //                             className={classes.cardActionLeft}
+    //                             variant='outlined'
+    //                             size='small'
+    //                             color='primary'
+    //                             // disabled={isLoading}
+    //                             onClick={this.onCancel.bind(this)}
+    //                             fullWidth>
+    //                             <Icons.ArrowBackIos />
+    //                             назад
+    //                         </Button>
+    //                     </Link>
+    //                 </Grid>
+    //                 <Grid item xs={6}>
+    //                     <JDialogAddRules classButton={classes.cardActionRight} />
+    //                 </Grid>
+    //             </Grid>
+    //         </CardActions>
+    //     );
+    // }
 
     render() {
         const { classes, isactive } = this.props;
@@ -344,12 +328,12 @@ class JCardStore extends React.Component {
                             ? this.renderBodyRulesEdit()
                             : this.renderBodyRules())}
                     </div>
-                    {cardTab === 0 && (editing
-                        ? this.renderFooterInfoEdit()
-                        : this.renderFooter())}
-                    {cardTab === 1 && (editing
-                        ? this.renderFooterRulesEdit()
-                        : this.renderFooter())}
+                    {editing
+                        ? this.renderFooterEdit()
+                        : this.renderFooter()}
+                    {/*{cardTab === 1 && (editing*/}
+                        {/*? this.renderFooterEdit()*/}
+                        {/*: this.renderFooter())}*/}
                     {/*{cardTab === 1 && (editing*/}
                         {/*? this.renderFooterInfoEdit()*/}
                         {/*: this.renderFooter())}*/}
@@ -367,7 +351,7 @@ JCardStore = withStyles(styles, { withTheme: true })(JCardStore);
 export default connect(
     null,
     dispatch => ({
-        onUpdateField: (id, field, value) => dispatch(updateCardStoreField(id, field, value)),
-        onRemoteSync: (id) => dispatch(remoteSyncCardStore(id)),
+        onRemoteUpdateField: (id, field, value) => dispatch(remoteUpdateCardStoreField(id, field, value)),
+        // onRemoteSync: (id) => dispatch(remoteSyncCardStore(id)),
     })
 )(JCardStore);

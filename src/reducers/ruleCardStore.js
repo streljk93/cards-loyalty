@@ -28,7 +28,7 @@ const ruleCardStore = (state = initialState, action) => {
                 }),
             });
 
-        case 'UPDATE_RULE_CARD_STORE_FIELD':
+        case 'UPDATE_RULE_CARD_STORE':
             return Object.assign({}, state, {
                 data: state.data.map(rule => {
                     if (rule.id === action.payload.id) {
