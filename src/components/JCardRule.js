@@ -19,14 +19,7 @@ import styles from '../styles/JCardRuleStyles';
 
 class JCardRule extends React.Component {
 
-    componentDidMount() {
-        this.props.onRemoteFetchRuleList();
-        this.props.onRemoteFetchRuleTypeList();
-        this.props.onRemoteFetchActionList();
-        this.props.onRemoteFetchHandlerList();
-    }
-
-    makeTextForRead(text) {
+    static makeTextForRead(text) {
         if (!text) return '';
         else return text.split(' ').map(text => {
             if (text.length > 8) {
@@ -54,23 +47,26 @@ class JCardRule extends React.Component {
     }
 
     render() {
-        const { classes, id, ruleId, value, result, editing, onRemoteDeleteRuleCardStore } = this.props;
-        const rule = this.props.rule.data
-            ? this.props.rule.data.filter(rule => rule.id === ruleId)[0]
-            : {};
-        const action = this.props.action.data && rule
-            ? this.props.action.data.filter(action => action.id === rule.action_id)[0]
-            : {};
-        const handler = this.props.handler.data && rule
-            ? this.props.handler.data.filter(handler => handler.id === rule.handler_id)[0]
-            : {};
-        // const ruleType = this.props.ruleType.data.filter(ruleType => ruleType.id === rule.rule_type_id)[0];
-        if (rule) return (
-            <ExpansionPanel onChange={() => console.log('change2')}>
+        const {
+            classes,
+            id,
+            action,
+            value,
+            actionIsFill,
+            handler,
+            result,
+            handlerIsFill,
+            sign,
+            editing,
+            onRemoteDelete,
+        } = this.props;
+
+        return (
+            <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<Icons.ExpandMore />}>
                     <div className={classes.field}>
                         <Typography className={classes.typography}>
-                            {action ? this.makeTextForRead(action.name) : ''}
+                            {JCardRule.makeTextForRead(action)}
                         </Typography>
                     </div>
                     <div className={classes.sign}>
@@ -82,14 +78,14 @@ class JCardRule extends React.Component {
                     </div>
                     <div className={classes.field}>
                         <Typography className={classes.typography}>
-                            {handler ? this.makeTextForRead(handler.name) : ''}
+                            {JCardRule.makeTextForRead(handler)}
                         </Typography>
                     </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails style={{ paddingTop: 0, paddingBottom: 14 }}>
                     <div className={classes.field}>
                         <Select
-                            value={rule.sign}
+                            value={sign}
                             classes={{
                                 icon: classes.selectIcon,
                                 select: classes.select,
@@ -130,11 +126,11 @@ class JCardRule extends React.Component {
                             margin="normal"
                             variant="outlined"
                             classes={{
-                                root: (editing && rule.action_isfill)
+                                root: (editing && actionIsFill)
                                     ? classes.textFieldRootEditing
                                     : classes.textFieldRoot
                             }}
-                            disabled={!editing || !rule.action_isfill}
+                            disabled={!editing || !actionIsFill}
                         />
                     </div>
                     <div className={classes.sign}>
@@ -151,11 +147,11 @@ class JCardRule extends React.Component {
                             margin="normal"
                             variant="outlined"
                             classes={{
-                                root: (editing && rule.handler_isfill)
+                                root: (editing && handlerIsFill)
                                     ? classes.textFieldRootEditing
                                     : classes.textFieldRoot
                             }}
-                            disabled={!editing || !rule.handler_isfill}
+                            disabled={!editing || !handlerIsFill}
                         />
                     </div>
                     <div style={{ width: 32 }} />
@@ -169,7 +165,7 @@ class JCardRule extends React.Component {
                                 color='secondary'
                                 // variant='outlined'
                                 style={{ flex: 1, marginLeft: 0 }}
-                                onClick={() => onRemoteDeleteRuleCardStore(id)}
+                                onClick={() => onRemoteDelete(id)}
                                 fullWidth>
                                 <Icons.Delete />
                                 Удалить
@@ -179,10 +175,10 @@ class JCardRule extends React.Component {
                 )}
             </ExpansionPanel>
         );
-        return (<div></div>);
     }
 
 }
 
+JCardRule.defaultProps = { sign: '' };
 JCardRule = withStyles(styles, { withTheme: true })(JCardRule);
 export default JCardRule;
