@@ -57,6 +57,7 @@ class JCardRule extends React.Component {
             result,
             handlerIsFill,
             sign,
+            isrequired,
             editing,
             onRemoteDelete,
         } = this.props;
@@ -156,14 +157,12 @@ class JCardRule extends React.Component {
                     </div>
                     <div style={{ width: 32 }} />
                 </ExpansionPanelDetails>
-                {editing && (
+                {(editing && !isrequired) && (
                     <div>
-                        {/*<Divider />*/}
                         <ExpansionPanelActions>
                             <Button
                                 size='small'
                                 color='secondary'
-                                // variant='outlined'
                                 style={{ flex: 1, marginLeft: 0 }}
                                 onClick={() => onRemoteDelete(id)}
                                 fullWidth>

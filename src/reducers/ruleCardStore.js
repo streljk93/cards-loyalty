@@ -28,6 +28,11 @@ const ruleCardStore = (state = initialState, action) => {
                 }),
             });
 
+        case 'CREATE_RULE_CARD_STORE':
+            return Object.assign({}, state, {
+                data: [ ...state.data, { ...action.payload }],
+            });
+
         case 'UPDATE_RULE_CARD_STORE':
             return Object.assign({}, state, {
                 data: state.data.map(rule => {

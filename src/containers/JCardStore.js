@@ -192,21 +192,21 @@ class JCardStore extends React.Component {
     }
 
     renderBodyRules() {
-        const { id } = this.props;
+        const { id, typeId } = this.props;
 
         return (
             <CardContent>
-                <JCardRules cardId={id} />
+                <JCardRules cardId={id} cardTypeId={typeId} />
             </CardContent>
         );
     }
 
     renderBodyRulesEdit() {
-        const { id } = this.props;
+        const { id, typeId } = this.props;
 
         return (
             <CardContent style={{ overflowX: 'scroll' }}>
-                <JCardRules cardId={id} editing={true} />
+                <JCardRules cardId={id} cardTypeId={typeId} editing={true} />
             </CardContent>
         );
     }

@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 // actions
 import { remoteFetchRuleCardTypeList } from "../actions/ruleCardType";
 import {
-    remoteDeleteRuleCardStore,
     remoteFetchRuleCardStoreList,
-    remoteUpdateRuleCardStoreField
+    remoteCreateRuleCardStore,
+    remoteUpdateRuleCardStoreField,
+    remoteDeleteRuleCardStore,
 } from "../actions/ruleCardStore";
 import { remoteFetchRuleList } from "../actions/rule";
 import { remoteFetchRuleTypeList } from "../actions/ruleType";
@@ -29,23 +30,29 @@ class JCardRules extends React.Component {
     }
 
     render() {
-        const { cardId, editing } = this.props;
+        const { cardId, cardTypeId, editing } = this.props;
         const ruleCardStoreList = this.props.ruleCardStore.data.filter(rule => rule.card_store_id === cardId);
+        const ruleCardTypeList = this.props.ruleCardType.data.filter(rule => rule.card_type_id === cardTypeId);
+        const ruleCardTypeListWithoutRelation = ruleCardTypeList.filter(ruleCT => {
+            let isSave = true;
+            ruleCardStoreList.forEach(ruleCS => {
+                if (ruleCT.id === ruleCS.rule_card_type_id) isSave = false;
+            });
+            return isSave;
+        });
 
         return (
             <div>
                 {ruleCardStoreList.map((ruleCardStore, i) => {
-                    const rule = this.props.rule.data.filter(r => r.id === ruleCardStore.rule_id)[0] || {};
+                    const ruleCardType = ruleCardTypeList.filter(r => r.id === ruleCardStore.rule_card_type_id)[0] || {};
+                    const rule = this.props.rule.data.filter(r => r.id === ruleCardType.rule_id)[0] || {};
                     const action = this.props.action.data.filter(a => a.id === rule.action_id)[0] || {};
                     const handler = this.props.handler.data.filter(h => h.id === rule.handler_id)[0] || {};
-                    const ruleCardType = this.props.ruleCardType.data.filter(r => r.id === ruleCardStore.rule_card_type_id)[0];
 
                     return (
                         <JCardRule
                             key={i}
                             id={ruleCardStore.id}
-                            cardStoreId={ruleCardStore.card_store_id}
-                            ruleId={ruleCardStore.rule_id}
                             action={action.name}
                             handler={handler.name}
                             value={ruleCardStore.value}
@@ -54,13 +61,21 @@ class JCardRules extends React.Component {
                             actionIsFill={rule.action_isfill}
                             handlerIsFill={rule.handler_isfill}
                             editing={editing}
+                            isrequired={ruleCardType.isrequired}
                             onRemoteUpdateField={this.props.onRemoteUpdateField}
                             onRemoteDelete={this.props.onRemoteDelete}
                         />
                     );
                 })}
                 {editing && (
-                    <JCardRuleAdd />
+                    <JCardRuleAdd
+                        cardStoreId={cardId}
+                        ruleCardTypeList={ruleCardTypeListWithoutRelation}
+                        rule={this.props.rule}
+                        action={this.props.action}
+                        handler={this.props.handler}
+                        onRemoteCreate={this.props.onRemoteCreate}
+                    />
                 )}
             </div>
         )
@@ -70,6 +85,7 @@ class JCardRules extends React.Component {
 
 export default connect(
     state => ({
+        ruleCardType: state.ruleCardType,
         ruleCardStore: state.ruleCardStore,
         rule: state.rule,
         ruleType: state.ruleType,
@@ -83,6 +99,7 @@ export default connect(
         onRemoteFetchRuleTypeList: () => dispatch(remoteFetchRuleTypeList()),
         onRemoteFetchActionList: () => dispatch(remoteFetchActionList()),
         onRemoteFetchHandlerList: () => dispatch(remoteFetchHandlerList()),
+        onRemoteCreate: (data) => dispatch(remoteCreateRuleCardStore(data)),
         onRemoteUpdateField: (id, field, value) => dispatch(remoteUpdateRuleCardStoreField(id, field, value)),
         onRemoteDelete: (id) => dispatch(remoteDeleteRuleCardStore(id)),
     })

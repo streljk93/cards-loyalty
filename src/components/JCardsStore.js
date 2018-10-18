@@ -16,6 +16,7 @@ class JCardsStore extends React.Component {
             if (type.id === card.card_type_id) {
                 card.slug = type.slug;
                 card.qrcode = type.qrcode;
+                card.typeId = type.id;
             }
         });
 

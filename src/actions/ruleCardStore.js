@@ -9,11 +9,11 @@ function makeRuleCardStore (data) {
     return {
         id: data.id || uuid(),
         card_store_id: data.card_store_id,
-        rule_id: data.rule_id,
+        rule_card_type_id: data.rule_card_type_id,
         value: data.value,
         result: data.result,
-        isactive: (data.isactive !== undefined) ? data.isactive : null,
-        lastupdated: data.lastupdated || moment().format('YYYY-MM-DD HH:mm:ss'),
+        isactive: null,
+        lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
 }
 
@@ -40,6 +40,15 @@ function syncRuleCardStoreList (ruleCardStoreList) {
     return {
         type: 'SYNC_RULE_CARD_STORE_LIST',
         payload: ruleCardStoreList,
+    };
+}
+
+function createRuleCardStore (data) {
+    const ruleCardStore = makeRuleCardStore(data);
+
+    return {
+        type: 'CREATE_RULE_CARD_STORE',
+        payload: ruleCardStore,
     };
 }
 
@@ -95,7 +104,41 @@ export function remoteFetchRuleCardStoreList () {
     };
 }
 
-export function remoteUpdateRuleCardStore (data) {
+export function remoteCreateRuleCardStore (data) {
+    return (dispatch, getState) => {
+
+        const { account } = getState();
+
+        const action = createRuleCardStore(data);
+        dispatch(action);
+        dispatch(requestRuleCardStore());
+        dispatch(startCommonLoader());
+
+        return fetch(`${config.api}/rule/card-store`, {
+            method: 'POST',
+            body: JSON.stringify(action.payload),
+            headers: {
+                'Authorization': account.token,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) dispatch(updateRuleCardStore(data.info));
+                else data.errors.map(error => dispatch(addError('Обновление правил у карты', error)));
+                dispatch(responseRuleCardStore());
+                dispatch(stopCommonLoader());
+            })
+            .catch(error => {
+                dispatch(addError('Обновление правил у карты', error.message()));
+                dispatch(responseRuleCardStore());
+                dispatch(stopCommonLoader());
+            });
+
+    }
+}
+
+function remoteUpdateRuleCardStore (data) {
     return (dispatch, getState) => {
 
         const { account } = getState();
