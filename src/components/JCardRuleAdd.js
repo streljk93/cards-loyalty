@@ -20,6 +20,7 @@ class JCardRuleAdd extends React.Component {
         super(props);
 
         this.state = {
+            isexpanded: false,
             action: {},
             handler: {},
             rule: {},
@@ -32,15 +33,11 @@ class JCardRuleAdd extends React.Component {
         this.setRuleCardType = this.setRuleCardType.bind(this);
     }
 
-    componentDidUpdate() {
+    // create rule_card_store
+    componentDidUpdate(props, state) {
         if (this.state.action.id && this.state.handler.id) {
 
-            const ruleCardStore = this.createRuleCardStore();
-            this.props.onRemoteCreate(ruleCardStore);
-            this.setState({
-                action: {},
-                handler: {},
-            });
+            this.createRuleCardStore();
 
         }
     }
@@ -66,11 +63,15 @@ class JCardRuleAdd extends React.Component {
 
         this.props.ruleCardTypeList.forEach(ruleCT => {
             let isSave = true;
-            const rule = this.props.rule.data.filter(r => r.id === ruleCT.rule_id)[0] || {};
+            const rule = this.props.rule.data.filter(r => (r.id === ruleCT.rule_id && r.action_id === this.state.action.id))[0] || {};
             const handler = this.props.handler.data.filter(h => h.id === rule.handler_id)[0] || {};
-            handlers.forEach(a => {
+
+            // check
+            if (Object.keys(handler).length === 0) isSave = false;
+            else handlers.forEach(a => {
                 if (a.id === handler.id) isSave = false;
             });
+
             if (isSave) handlers.push(handler);
         });
 
@@ -91,12 +92,17 @@ class JCardRuleAdd extends React.Component {
         const rule = this.setRule();
         const ruleCardType = this.setRuleCardType(rule);
 
-        return {
+        this.props.onRemoteCreate({
             ...ruleCardType,
             id: null,
             card_store_id: this.props.cardStoreId,
             rule_card_type_id: ruleCardType.id
-        };
+        });
+        this.setState({
+            isexpanded: false,
+            action: {},
+            handler: {},
+        });
     }
 
     setRule() {
@@ -124,7 +130,9 @@ class JCardRuleAdd extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-            <ExpansionPanel>
+            <ExpansionPanel
+                expanded={this.state.isexpanded}
+                onChange={() => this.setState({ isexpanded: !this.state.isexpanded })}>
                 <ExpansionPanelSummary classes={{
                     root: classes.expansionPanelSummeryRoot,
                     content: classes.expansionPanelSummeryContent,

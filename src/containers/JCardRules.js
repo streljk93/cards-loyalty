@@ -8,6 +8,7 @@ import {
     remoteCreateRuleCardStore,
     remoteUpdateRuleCardStoreField,
     remoteDeleteRuleCardStore,
+    toggleExpandedRuleCardStore,
 } from "../actions/ruleCardStore";
 import { remoteFetchRuleList } from "../actions/rule";
 import { remoteFetchRuleTypeList } from "../actions/ruleType";
@@ -62,12 +63,14 @@ class JCardRules extends React.Component {
                             handlerIsFill={rule.handler_isfill}
                             editing={editing}
                             isrequired={ruleCardType.isrequired}
+                            isexpanded={ruleCardStore.isexpanded}
+                            onToggleExpanded={this.props.onToggleExpanded}
                             onRemoteUpdateField={this.props.onRemoteUpdateField}
                             onRemoteDelete={this.props.onRemoteDelete}
                         />
                     );
                 })}
-                {editing && (
+                {(editing && ruleCardTypeListWithoutRelation.length > 0) && (
                     <JCardRuleAdd
                         cardStoreId={cardId}
                         ruleCardTypeList={ruleCardTypeListWithoutRelation}
@@ -102,5 +105,6 @@ export default connect(
         onRemoteCreate: (data) => dispatch(remoteCreateRuleCardStore(data)),
         onRemoteUpdateField: (id, field, value) => dispatch(remoteUpdateRuleCardStoreField(id, field, value)),
         onRemoteDelete: (id) => dispatch(remoteDeleteRuleCardStore(id)),
+        onToggleExpanded: (id) => dispatch(toggleExpandedRuleCardStore(id)),
     })
 )(JCardRules);

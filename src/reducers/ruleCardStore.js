@@ -50,6 +50,18 @@ const ruleCardStore = (state = initialState, action) => {
                 }),
             });
 
+        case 'TOGGLE_EXPANDED_RULE_CARD_STORE':
+            return Object.assign({}, state, {
+                data: state.data.map(rule => {
+                    if (action.payload.isexpanded !== null) rule.isexpanded = false;
+                    if (rule.id === action.payload.ruleCardStoreId) {
+                        if (action.payload.isexpanded !== null) rule.isexpanded = action.payload.isexpanded;
+                        else rule.isexpanded = !rule.isexpanded;
+                    }
+                    return rule;
+                })
+            });
+
         default:
             return state;
 

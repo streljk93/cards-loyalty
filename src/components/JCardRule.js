@@ -58,12 +58,15 @@ class JCardRule extends React.Component {
             handlerIsFill,
             sign,
             isrequired,
+            isexpanded,
             editing,
             onRemoteDelete,
         } = this.props;
 
         return (
-            <ExpansionPanel>
+            <ExpansionPanel
+                expanded={!!isexpanded}
+                onChange={() => this.props.onToggleExpanded(this.props.id)}>
                 <ExpansionPanelSummary expandIcon={<Icons.ExpandMore />}>
                     <div className={classes.field}>
                         <Typography className={classes.typography}>

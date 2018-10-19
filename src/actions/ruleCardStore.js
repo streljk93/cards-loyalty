@@ -12,7 +12,7 @@ function makeRuleCardStore (data) {
         rule_card_type_id: data.rule_card_type_id,
         value: data.value,
         result: data.result,
-        isactive: null,
+        isactive: (data.isactive !== undefined) ? data.isactive : null,
         lastupdated: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
 }
@@ -111,6 +111,7 @@ export function remoteCreateRuleCardStore (data) {
 
         const action = createRuleCardStore(data);
         dispatch(action);
+        dispatch(toggleExpandedRuleCardStore(action.payload.id, true));
         dispatch(requestRuleCardStore());
         dispatch(startCommonLoader());
 
@@ -124,7 +125,10 @@ export function remoteCreateRuleCardStore (data) {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success) dispatch(updateRuleCardStore(data.info));
+                if (data.success) {
+                    dispatch(updateRuleCardStore(data.info));
+                    dispatch(toggleExpandedRuleCardStore(data.info.id, true));
+                }
                 else data.errors.map(error => dispatch(addError('Обновление правил у карты', error)));
                 dispatch(responseRuleCardStore());
                 dispatch(stopCommonLoader());
@@ -206,5 +210,15 @@ export function remoteDeleteRuleCardStore (id) {
                 dispatch(responseRuleCardStore());
                 dispatch(stopCommonLoader());
             });
+    };
+}
+
+export function toggleExpandedRuleCardStore (ruleCardStoreId, isexpanded = null) {
+    return {
+        type: 'TOGGLE_EXPANDED_RULE_CARD_STORE',
+        payload: {
+            ruleCardStoreId,
+            isexpanded,
+        },
     };
 }

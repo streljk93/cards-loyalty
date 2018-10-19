@@ -205,7 +205,7 @@ class JCardStore extends React.Component {
         const { id, typeId } = this.props;
 
         return (
-            <CardContent style={{ overflowX: 'scroll' }}>
+            <CardContent>
                 <JCardRules cardId={id} cardTypeId={typeId} editing={true} />
             </CardContent>
         );
@@ -265,35 +265,6 @@ class JCardStore extends React.Component {
         );
     }
 
-    // renderFooterRulesEdit() {
-    //     // const { classes, isLoading } = this.props;
-    //     const { classes } = this.props;
-    //     return (
-    //         <CardActions>
-    //             <Grid container>
-    //                 <Grid item xs={6}>
-    //                     <Link to={'/cards'}>
-    //                         <Button
-    //                             className={classes.cardActionLeft}
-    //                             variant='outlined'
-    //                             size='small'
-    //                             color='primary'
-    //                             // disabled={isLoading}
-    //                             onClick={this.onCancel.bind(this)}
-    //                             fullWidth>
-    //                             <Icons.ArrowBackIos />
-    //                             назад
-    //                         </Button>
-    //                     </Link>
-    //                 </Grid>
-    //                 <Grid item xs={6}>
-    //                     <JDialogAddRules classButton={classes.cardActionRight} />
-    //                 </Grid>
-    //             </Grid>
-    //         </CardActions>
-    //     );
-    // }
-
     render() {
         const { classes, isactive } = this.props;
         const { tab, editing } = this.state;
@@ -331,15 +302,6 @@ class JCardStore extends React.Component {
                     {editing
                         ? this.renderFooterEdit()
                         : this.renderFooter()}
-                    {/*{cardTab === 1 && (editing*/}
-                        {/*? this.renderFooterEdit()*/}
-                        {/*: this.renderFooter())}*/}
-                    {/*{cardTab === 1 && (editing*/}
-                        {/*? this.renderFooterInfoEdit()*/}
-                        {/*: this.renderFooter())}*/}
-                    {/*{cardTab === 0 && (editing*/}
-                        {/*? this.renderFooter()*/}
-                        {/*: this.renderFooterRulesEdit())}*/}
                 </Card>
             </Grid>
         );
