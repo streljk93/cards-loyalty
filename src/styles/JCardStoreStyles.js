@@ -17,6 +17,19 @@ export default (theme) => ({
         paddingTop: '50%', // 16:9
         position: 'relative',
     },
+    qrcodeWrap: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        height: '100%',
+        display: 'flex',
+        padding: '4%',
+    },
+    qrcode: {
+        height: '70%',
+        padding: '10px',
+        background: 'white',
+    },
     tabRoot: {
         minWidth: 72,
     },

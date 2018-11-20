@@ -41,6 +41,7 @@ export function remoteFetchRuleCardTypeList () {
                 if (data.success) dispatch(syncRuleCardTypeList(data.info));
                 dispatch(responseRuleCardType());
                 dispatch(stopCommonLoader());
+                return data;
             })
             .catch(error => {
                 dispatch(addError('Получение правил карт-типов', error.message));

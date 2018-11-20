@@ -90,12 +90,12 @@ class JCardStore extends React.Component {
                 className={classes.media}
                 image={image}
                 title={name}>
-                <div style={{ position: 'absolute', top: 0, right: 0, height: '100%', display: 'flex', padding: '4%' }}>
+                <div className={classes.qrcodeWrap}>
                     <QRCode
                         bgColor='#FFFFFF'
                         fgColor='#000000'
                         level='L'
-                        style={{ height: '70%', padding: '10px', background: 'white' }}
+                        className={classes.qrcode}
                         value={qrcode || 'notfound'}
                     />
                 </div>
@@ -132,12 +132,12 @@ class JCardStore extends React.Component {
                 }}>
                     <Icons.AddAPhoto style={{ color: theme.palette.grey[50], fontSize: '70px' }} />
                 </div>
-                <div style={{ position: 'absolute', top: 0, right: 0, height: '100%', display: 'flex', padding: '4%' }}>
+                <div className={classes.qrcodeWrap}>
                     <QRCode
                         bgColor='#FFFFFF'
                         fgColor='#000000'
                         level='L'
-                        style={{ height: '70%', padding: '10px', background: 'white' }}
+                        className={classes.qrcode}
                         value={qrcode || 'notfound'}
                     />
                 </div>

@@ -16,6 +16,11 @@ class JContentCardsStore extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.props.onRemoteFetchCardTypeList();
+        this.props.onRemoteFetchCardStoreList();
+    }
+
     openMenuCardType(event) {
         this.setState({ anchorEl: event.currentTarget });
     }
@@ -24,9 +29,41 @@ class JContentCardsStore extends React.Component {
         this.setState({ anchorEl: null });
     }
 
-    componentDidMount() {
-        this.props.remoteFetchCardTypeList();
-        this.props.remoteFetchCardStoreList();
+    createCardStore(cardType) {
+        const cardStore = {
+            card_type_id: cardType.id,
+            store_id: this.props.store.id,
+            image: cardType.image,
+            name: cardType.name,
+            description: cardType.description,
+        };
+        this.props.onRemoteSaveCardStore(cardStore).then(data => {
+            if (data.success) {
+                if (!this.props.ruleCardTypeMeta.updated) {
+                    this.props.onRemoteFetchRuleCardTypeList().then(({ success }) => {
+                        if (success) {
+                            this.createRuleCardStore(data.info);
+                        }
+                    });
+                } else {
+                    this.createRuleCardStore(data.info);
+                }
+            }
+        });
+        this.closeMenuCardType();
+    }
+
+    createRuleCardStore(cardStore) {
+        this.props.ruleCardType.forEach(rule => {
+            if (cardStore.card_type_id === rule.card_type_id && rule.isrequired) {
+                this.props.onRemoteCreateRuleCardStore({
+                    card_store_id: cardStore.id,
+                    rule_card_type_id: rule.id,
+                    value: rule.value,
+                    result: rule.result,
+                });
+            }
+        });
     }
 
     render() {
@@ -49,7 +86,7 @@ class JContentCardsStore extends React.Component {
                         {this.props.cardType.map((card, i) =>
                             <MenuItem
                                 key={i}
-                                onClick={this.closeMenuCardType.bind(this)}>
+                                onClick={() => this.createCardStore(card)}>
                                 {card.name}
                             </MenuItem>
                         )}

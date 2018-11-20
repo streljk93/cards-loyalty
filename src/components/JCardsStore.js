@@ -23,7 +23,6 @@ class JCardsStore extends React.Component {
         return card;
     }
 
-
     render() {
         const {
             classes,

@@ -93,7 +93,8 @@ export function remoteSaveCardStore (id, { card_type_id, store_id, image, name, 
             .then(data => {
                 if (!data.success) data.errors.map(error => dispatch(addError('Сохранение карты', error)));
                 dispatch(responseCardStore());
-                dispatch(updateCardStore(data.success ? data.info : {}))
+                dispatch(updateCardStore(data.success ? data.info : {}));
+                return data;
             })
             .catch(error => {
                 dispatch(addError('Сохранение карты', error.message));

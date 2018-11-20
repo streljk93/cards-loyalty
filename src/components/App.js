@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core';
 import JHeader from './JHeader';
 import JDrawer from './JDrawer';
 import JScreenCardsStore from '../containers/JScreenCardsStore';
+import JScreenUsers from '../screen/JScreenUsers';
 import styles from '../styles/AppStyles';
 
 const menu = [[{
@@ -49,6 +50,7 @@ class App extends React.Component {
                     <div className={classes.content}>
 
                         <Route exact path='/cards' component={JScreenCardsStore} />
+                        <Route exact path='/users' component={JScreenUsers} />
 
                     </div>
                 </main>
