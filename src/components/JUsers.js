@@ -2,7 +2,7 @@
 import React from 'react';
 
 // own components
-import JUser from './JUser';
+import JUser from '../containers/JUser';
 
 class JUsers extends React.Component {
 
@@ -35,6 +35,7 @@ class JUsers extends React.Component {
                     phone='9103684565'
                     dob='27.09.1993'
                     date='12.12.2018'
+                    onOpenDrawerEditor={this.props.onOpenDrawerEditor}
                 />
             </div>
         );

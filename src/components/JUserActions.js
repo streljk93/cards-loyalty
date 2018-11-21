@@ -8,6 +8,14 @@ import styles from '../styles/JUserActionsStyles';
 
 class JUserActions extends React.Component {
 
+    onDelete() {
+        this.props.onOpenAlert(
+            'Удаление пользователя',
+            'Вы уверины что хотите удалить пользователя?',
+            () => console.log('ok'),
+        );
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -34,7 +42,7 @@ class JUserActions extends React.Component {
                                 color='primary'
                                 size='small'
                                 style={{ minWidth: 50 }}>
-                                <Icons.CreditCard />
+                                <Icons.CardGiftcard />
                             </Button>
                         </Hidden>
                         {/* MOBILE END */}
@@ -48,12 +56,14 @@ class JUserActions extends React.Component {
                                 color='primary'
                                 size='small'
                                 variant='outlined'
+                                onClick={this.props.onOpenDrawerEditor}
                                 style={{ marginRight: 8 }}>
                                 редактировать
                             </Button>
                             <Button
                                 color='secondary'
                                 size='small'
+                                onClick={this.onDelete.bind(this)}
                                 variant='outlined'>
                                 удалить
                             </Button>
@@ -66,6 +76,7 @@ class JUserActions extends React.Component {
                                 variant='outlined'
                                 color='primary'
                                 size='small'
+                                onClick={this.props.onOpenDrawerEditor}
                                 style={{ minWidth: 50, marginRight: 8 }}>
                                 <Icons.Edit />
                             </Button>
@@ -73,6 +84,7 @@ class JUserActions extends React.Component {
                                 variant='outlined'
                                 color='secondary'
                                 size='small'
+                                onClick={this.onDelete.bind(this)}
                                 style={{ minWidth: 50 }}>
                                 <Icons.Delete />
                             </Button>

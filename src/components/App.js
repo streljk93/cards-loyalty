@@ -5,8 +5,9 @@ import { withStyles } from '@material-ui/core';
 // own components
 import JHeader from './JHeader';
 import JDrawer from './JDrawer';
+import JAlert from '../containers/JAlert';
 import JScreenCardsStore from '../containers/JScreenCardsStore';
-import JScreenUsers from '../screen/JScreenUsers';
+import JScreenUsers from '../containers/JScreenUsers';
 import styles from '../styles/AppStyles';
 
 const menu = [[{
@@ -45,6 +46,7 @@ class App extends React.Component {
                     onToggleDrawer={this.props.onToggleDrawer}
                     menu={menu}
                 />
+                <JAlert />
                 <main className={classes.main}>
                     <div className={classes.toolbar} />
                     <div className={classes.content}>

@@ -31,6 +31,18 @@ export function toggleDrawer () {
     };
 }
 
+export function openDrawerEditor () {
+    return {
+        type: 'OPEN_DRAWER_EDITOR',
+    };
+}
+
+export function closeDrawerEditor () {
+    return {
+        type: 'CLOSE_DRAWER_EDITOR',
+    };
+}
+
 export function addError (title, text) {
     return {
         type: 'ADD_ERROR',
@@ -49,5 +61,18 @@ export function AddGlobalMessage ({ lvl, title, text }) {
             title,
             text,
         },
+    };
+}
+
+export function openAlert(title, content, callback) {
+    return {
+        type: 'OPEN_ALERT',
+        payload: { title, content, callback },
+    };
+}
+
+export function closeAlert () {
+    return {
+        type: 'CLOSE_ALERT',
     };
 }

@@ -1,5 +1,6 @@
 // libraries
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     ExpansionPanel,
     ExpansionPanelSummary,
@@ -8,11 +9,14 @@ import {
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
 
+// actions
+import { openDrawerEditor, openAlert } from "../actions/ui";
+
 // own components
-import JCardsUser from './JCardsUser';
-import JUserSummary from './JUserSummary';
-import JUserInfo from './JUserInfo';
-import JUserActions from './JUserActions';
+import JCardsUser from '../components/JCardsUser';
+import JUserSummary from '../components/JUserSummary';
+import JUserInfo from '../components/JUserInfo';
+import JUserActions from '../components/JUserActions';
 
 class JUser extends React.Component {
 
@@ -59,7 +63,10 @@ class JUser extends React.Component {
                 </Hidden>
                 {/* MOBILE END */}
 
-                <JUserActions />
+                <JUserActions
+                    onOpenDrawerEditor={this.props.onOpenDrawerEditor}
+                    onOpenAlert={this.props.onOpenAlert}
+                />
 
                 <ExpansionPanelDetails style={{ padding: 24 }}>
                     <JCardsUser />
@@ -69,5 +76,13 @@ class JUser extends React.Component {
     }
 
 }
+
+JUser = connect(
+    null,
+    dispatch => ({
+        onOpenDrawerEditor: () => dispatch(openDrawerEditor()),
+        onOpenAlert: (title, content, callback) => dispatch(openAlert(title, content, callback)),
+    }),
+)(JUser);
 
 export default JUser;

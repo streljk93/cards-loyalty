@@ -6,7 +6,8 @@ import * as Icons from '@material-ui/icons';
 // own components
 import JMenu from '../components/JMenu';
 import JUsers from '../components/JUsers';
-import JDrawerEditor from '../components/JDrawerEditor';
+import JDrawerEditor from '../containers/JDrawerEditor';
+import JUserEditor from '../components/JUserEditor';
 
 class JScreenUsers extends React.Component {
 
@@ -18,14 +19,16 @@ class JScreenUsers extends React.Component {
                     <Button
                         variant='contained'
                         color='primary'
-                        onClick={() => console.log('add user')}>
+                        onClick={this.props.onOpenDrawerEditor}>
                         <Icons.Add /> Добавить
                     </Button>
                 </JMenu>
 
-                <JUsers />
+                <JUsers data={this.props.users} />
 
-                <JDrawerEditor />
+                <JDrawerEditor onSave={() => console.log('save')}>
+                    <JUserEditor />
+                </JDrawerEditor>
             </div>
         );
     }

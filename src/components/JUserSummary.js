@@ -27,7 +27,7 @@ class JUserSummary extends React.Component {
                             onChange={() => console.log('change')}
                             value='1'
                             color='primary'
-                            style={{ padding: '0 10px 0 0' }}
+                            style={{ marginRight: 10, padding: 0 }}
                             classes={{ root: classes.checkbox }}
                         />
                         {`${lastname} ${firstname} ${middlename}`}
@@ -43,7 +43,7 @@ class JUserSummary extends React.Component {
                                 onChange={() => console.log('change')}
                                 value='1'
                                 color='primary'
-                                style={{ padding: '0 10px 0 0' }}
+                                style={{ marginRight: 10, padding: 0 }}
                                 classes={{ root: classes.checkbox }}
                             />
                         </div>
