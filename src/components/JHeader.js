@@ -38,7 +38,7 @@ class JHeader extends React.Component {
                         </IconButton>
                         <Typography
                             className={classes.navTitle}
-                            variant='title'
+                            variant='h6'
                             color='inherit'
                             noWrap>
                             {titleElem[0] || ''}

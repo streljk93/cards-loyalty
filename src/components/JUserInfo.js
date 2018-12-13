@@ -16,7 +16,8 @@ class JUserInfo extends React.Component {
             <ExpansionPanelDetails className={classes.container}>
                 <div>
                     <Typography className={classes.item}>
-                        <Icons.Today className={classes.icon} /> {dob} [{moment().diff(moment(dob, 'DD.MM.YYYY').format('YYYY-MM-DD'), 'years')}]
+                        <Icons.Today className={classes.icon} />
+                        {dob ? `${moment(dob, 'YYYY-MM-DD').format('DD.MM.YYYY')} [${moment().diff(dob, 'years')}]` : '-'}
                     </Typography>
                     <Typography className={classes.item}>
                         <Icons.Phone className={classes.icon} /> {phone}

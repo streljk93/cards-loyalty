@@ -1,6 +1,5 @@
 // libraries
 import React from 'react';
-import { connect } from 'react-redux';
 import {
     Toolbar,
     Drawer,
@@ -8,9 +7,6 @@ import {
     withStyles
 } from '@material-ui/core';
 import * as Icons from '@material-ui/icons';
-
-// actions
-import { closeDrawerEditor } from "../actions/ui";
 
 // own components
 import styles from '../styles/JDrawerEditorStyles';
@@ -29,8 +25,7 @@ class JDrawerEditor extends React.Component {
             <Drawer
                 anchor='right'
                 variant='temporary'
-                open={this.props.drawerEditorIsOpen}
-                // open={true}
+                open={this.props.open}
                 onClose={this.props.onClose}
                 ModalProps={{
                     keepMounted: true,
@@ -66,13 +61,5 @@ class JDrawerEditor extends React.Component {
 }
 
 JDrawerEditor = withStyles(styles, { withTheme: true })(JDrawerEditor);
-JDrawerEditor = connect(
-    state => ({
-        drawerEditorIsOpen: state.ui.drawerEditorIsOpen,
-    }),
-    dispatch => ({
-        onClose: () => dispatch(closeDrawerEditor()),
-    })
-)(JDrawerEditor);
 
 export default JDrawerEditor;

@@ -32,7 +32,7 @@ class JDrawer extends React.Component {
                 }}>
                     <Typography
                         className={classes.navTitle}
-                        variant='title'
+                        variant='h6'
                         color='inherit'
                         noWrap>
                         JK 

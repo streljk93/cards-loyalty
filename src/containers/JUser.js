@@ -10,7 +10,8 @@ import {
 import * as Icons from '@material-ui/icons';
 
 // actions
-import { openDrawerEditor, openAlert } from "../actions/ui";
+import { remoteDeleteUser, selectUserEditing, selectUser } from "../actions/user";
+import { openDrawerEditor, openAlert, openDialogCardStore } from "../actions/ui";
 
 // own components
 import JCardsUser from '../components/JCardsUser';
@@ -20,12 +21,9 @@ import JUserActions from '../components/JUserActions';
 
 class JUser extends React.Component {
 
-    state = {
-        expanded: false,
-    };
-
     render() {
         const {
+            id,
             firstname,
             middlename,
             lastname,
@@ -35,11 +33,11 @@ class JUser extends React.Component {
         } = this.props;
 
         return (
-            <ExpansionPanel expanded={this.state.expanded}>
+            <ExpansionPanel expanded={this.props.selected}>
                 <ExpansionPanelSummary
                     expandIcon={
                         <Icons.ExpandMore
-                            onClick={() => this.setState({ expanded: !this.state.expanded })}
+                            onClick={() => this.props.onSelectUser(id)}
                         />
                     }
                     style={{ userSelect: 'auto', cursor: 'default' }}>
@@ -64,8 +62,12 @@ class JUser extends React.Component {
                 {/* MOBILE END */}
 
                 <JUserActions
+                    userId={id}
+                    onSelectUserEditing={this.props.onSelectUserEditing}
                     onOpenDrawerEditor={this.props.onOpenDrawerEditor}
                     onOpenAlert={this.props.onOpenAlert}
+                    onRemoteDeleteUser={this.props.onRemoteDeleteUser}
+                    onOpenDialogCardStore={this.props.onOpenDialogCardStore}
                 />
 
                 <ExpansionPanelDetails style={{ padding: 24 }}>
@@ -80,8 +82,12 @@ class JUser extends React.Component {
 JUser = connect(
     null,
     dispatch => ({
+        onSelectUser: (id) => dispatch(selectUser(id)),
+        onSelectUserEditing: (user) => dispatch(selectUserEditing(user)),
+        onRemoteDeleteUser: (id) => dispatch(remoteDeleteUser(id)),
         onOpenDrawerEditor: () => dispatch(openDrawerEditor()),
         onOpenAlert: (title, content, callback) => dispatch(openAlert(title, content, callback)),
+        onOpenDialogCardStore: () => dispatch(openDialogCardStore()),
     }),
 )(JUser);
 

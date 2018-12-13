@@ -8,11 +8,16 @@ import styles from '../styles/JUserActionsStyles';
 
 class JUserActions extends React.Component {
 
+    onEdit() {
+        this.props.onSelectUserEditing(this.props.userId);
+        this.props.onOpenDrawerEditor()
+    }
+
     onDelete() {
         this.props.onOpenAlert(
             'Удаление пользователя',
             'Вы уверины что хотите удалить пользователя?',
-            () => console.log('ok'),
+            () => this.props.onRemoteDeleteUser(this.props.userId),
         );
     }
 
@@ -29,6 +34,7 @@ class JUserActions extends React.Component {
                             <Button
                                 color='primary'
                                 size='small'
+                                onClick={this.props.onOpenDialogCardStore}
                                 variant='outlined'>
                                 добавить карту
                             </Button>
@@ -41,6 +47,7 @@ class JUserActions extends React.Component {
                                 variant='outlined'
                                 color='primary'
                                 size='small'
+                                onClick={this.props.onOpenDialogCardStore}
                                 style={{ minWidth: 50 }}>
                                 <Icons.CardGiftcard />
                             </Button>
@@ -56,7 +63,7 @@ class JUserActions extends React.Component {
                                 color='primary'
                                 size='small'
                                 variant='outlined'
-                                onClick={this.props.onOpenDrawerEditor}
+                                onClick={this.onEdit.bind(this)}
                                 style={{ marginRight: 8 }}>
                                 редактировать
                             </Button>
@@ -76,7 +83,7 @@ class JUserActions extends React.Component {
                                 variant='outlined'
                                 color='primary'
                                 size='small'
-                                onClick={this.props.onOpenDrawerEditor}
+                                onClick={this.onEdit.bind(this)}
                                 style={{ minWidth: 50, marginRight: 8 }}>
                                 <Icons.Edit />
                             </Button>

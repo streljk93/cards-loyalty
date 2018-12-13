@@ -62,7 +62,7 @@ export function remoteFetchMediaList () {
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
-                dispatch(addError('Получение медиафайлов', error));
+                dispatch(addError('Получение медиафайлов', error.message));
                 dispatch(responseMediaList([]));
                 dispatch(stopCommonLoader());
             });

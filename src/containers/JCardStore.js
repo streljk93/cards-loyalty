@@ -265,8 +265,30 @@ class JCardStore extends React.Component {
         );
     }
 
+    renderFooterSelect() {
+        const { id, classes } = this.props;
+
+        return (
+            <CardActions>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Button
+                            onClick={() => this.props.onSelect(id)}
+                            className={classes.cardActionLeft}
+                            variant='outlined'
+                            size='small'
+                            color='primary'>
+                            <Icons.DoneOutline style={{ paddingRight: 5 }} />
+                            Выбрать
+                        </Button>
+                    </Grid>
+                </Grid>
+            </CardActions>
+        );
+    }
+
     render() {
-        const { classes, isactive } = this.props;
+        const { classes, isactive, hasSelect } = this.props;
         const { tab, editing } = this.state;
         const cardTab = tab || 0;
 
@@ -299,9 +321,11 @@ class JCardStore extends React.Component {
                             ? this.renderBodyRulesEdit()
                             : this.renderBodyRules())}
                     </div>
-                    {editing
+                    {!hasSelect && (editing
                         ? this.renderFooterEdit()
-                        : this.renderFooter()}
+                        : this.renderFooter())}
+                    {hasSelect && (
+                        this.renderFooterSelect())}
                 </Card>
             </Grid>
         );

@@ -30,7 +30,7 @@ class JUserSummary extends React.Component {
                             style={{ marginRight: 10, padding: 0 }}
                             classes={{ root: classes.checkbox }}
                         />
-                        {`${lastname} ${firstname} ${middlename}`}
+                        {`${lastname || ''} ${firstname || ''} ${middlename || ''}`}
                     </Typography>
                 </Hidden>
                 {/* MOBILE END */}
@@ -48,16 +48,17 @@ class JUserSummary extends React.Component {
                             />
                         </div>
                         <Typography className={classes.cellTitle}>
-                            {`${lastname} ${firstname} ${middlename}`}
+                            {`${lastname || ''} ${firstname || ''} ${middlename || ''}`}
                         </Typography>
                         <Typography className={classes.cellTitle}>
-                            <Icons.Today style={{ paddingRight: 10 }} /> {dob} [{moment().diff(moment(dob, 'DD.MM.YYYY').format('YYYY-MM-DD'), 'years')}]
+                            <Icons.Today style={{ paddingRight: 10 }} />
+                            {dob ? `${moment(dob, 'YYYY-MM-DD').format('DD.MM.YYYY')} [${moment().diff(dob, 'years')}]` : '-'}
                         </Typography>
                         <Typography className={classes.cellTitle}>
                             <Icons.Phone style={{ paddingRight: 10 }} /> {phone}
                         </Typography>
                         <Typography className={classes.cellTitle}>
-                            <Icons.Email style={{ paddingRight: 10 }} /> {email}
+                            <Icons.Email style={{ paddingRight: 10 }} /> {email || '-'}
                         </Typography>
                     </div>
                 </Hidden>

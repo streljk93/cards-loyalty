@@ -8,6 +8,9 @@ const initialState = {
         open: false,
         callback: () => true,
     },
+    dialogCardStore: {
+        isOpen: false,
+    },
 };
 
 const ui = (state = initialState, action) => {
@@ -47,6 +50,20 @@ const ui = (state = initialState, action) => {
         case 'CLOSE_ALERT':
             return Object.assign({}, state, {
                 alert: initialState.alert,
+            });
+
+        case 'OPEN_DIALOG_CARD_STORE':
+            return Object.assign({}, state, {
+                dialogCardStore: Object.assign({}, state.dialogCardStore, {
+                    isOpen: true,
+                }),
+            });
+
+        case 'CLOSE_DIALOG_CARD_STORE':
+            return Object.assign({}, state, {
+                dialogCardStore: Object.assign({}, state.dialogCardStore, {
+                    isOpen: false,
+                }),
             });
 
         default:

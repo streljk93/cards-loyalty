@@ -1,4 +1,5 @@
 const initialState = {
+    selected: null,
     data: [],
     meta: {
         isFetching: false,

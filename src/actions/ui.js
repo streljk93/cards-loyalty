@@ -76,3 +76,15 @@ export function closeAlert () {
         type: 'CLOSE_ALERT',
     };
 }
+
+export function openDialogCardStore () {
+    return {
+        type: 'OPEN_DIALOG_CARD_STORE',
+    };
+}
+
+export function closeDialogCardStore () {
+    return {
+        type: 'CLOSE_DIALOG_CARD_STORE',
+    };
+}

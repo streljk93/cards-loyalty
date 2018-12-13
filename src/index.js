@@ -11,6 +11,9 @@ import store, { history } from './store';
 import App from './containers/App';
 import 'normalize.css';
 
+// settings
+window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
+
 render(
     <Provider store={store}>
         <ConnectedRouter history={history}>

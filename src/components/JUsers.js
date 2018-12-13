@@ -9,34 +9,20 @@ class JUsers extends React.Component {
     render() {
         return (
             <div>
-                <JUser
-                    firstname='JK'
-                    middlename='Mik'
-                    lastname='Strelnikov'
-                    email='strel.jk.93@gmail.com'
-                    phone='9103684565'
-                    dob='27.09.1993'
-                    date='12.12.2018'
-                />
-                <JUser
-                    firstname='Иван'
-                    middlename='Васильевич'
-                    lastname='Профессоров'
-                    email='prof@mail.ru'
-                    phone='9103684355'
-                    dob='27.09.1983'
-                    date='12.12.2018'
-                />
-                <JUser
-                    firstname='Андрей'
-                    middlename='Андреевич'
-                    lastname='Андреев'
-                    email='andrei.andrei.andrei@mail.ru'
-                    phone='9103684565'
-                    dob='27.09.1993'
-                    date='12.12.2018'
-                    onOpenDrawerEditor={this.props.onOpenDrawerEditor}
-                />
+                {this.props.data.map((user, i) =>
+                    <JUser
+                        key={i}
+                        id={user.id}
+                        firstname={user.firstname}
+                        middlename={user.middlename}
+                        lastname={user.lastname}
+                        email={user.email}
+                        phone={user.phone}
+                        dob={user.dob}
+                        date={user.date}
+                        selected={this.props.userSelected.id === user.id}
+                    />
+                )}
             </div>
         );
     }

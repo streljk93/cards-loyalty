@@ -134,7 +134,7 @@ export function remoteCreateRuleCardStore (data) {
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
-                dispatch(addError('Обновление правил у карты', error.message()));
+                dispatch(addError('Обновление правил у карты', error.message));
                 dispatch(responseRuleCardStore());
                 dispatch(stopCommonLoader());
             });
@@ -166,7 +166,7 @@ function remoteUpdateRuleCardStore (data) {
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
-                dispatch(addError('Обновление правил у карты', error.message()));
+                dispatch(addError('Обновление правил у карты', error.message));
                 dispatch(responseRuleCardStore());
                 dispatch(stopCommonLoader());
             });
@@ -206,7 +206,7 @@ export function remoteDeleteRuleCardStore (id) {
                 dispatch(stopCommonLoader());
             })
             .catch(error => {
-                dispatch(addError('Уадление правила', error.message()));
+                dispatch(addError('Уадление правила', error.message));
                 dispatch(responseRuleCardStore());
                 dispatch(stopCommonLoader());
             });
