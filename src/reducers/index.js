@@ -21,6 +21,7 @@ export default combineReducers({
     account,
     cardType,
     cardStore,
+    cardUser,
     rule,
     ruleType,
     action,

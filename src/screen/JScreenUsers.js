@@ -21,6 +21,10 @@ class JScreenUsers extends React.Component {
         this.props.onOpenDrawerEditor();
     }
 
+    onSelectCardStore(data) {
+        this.props.onRemoteCreateCardUser(data);
+    }
+
     render() {
 
         return (
@@ -46,7 +50,7 @@ class JScreenUsers extends React.Component {
                         onChangeField={this.props.onChangeUserEditingField}
                     />
                 </JDrawerEditor>
-                <JDialogCardStore onSelect={this.props.onSelectCardStore} />
+                <JDialogCardStore onSelect={this.onSelectCardStore.bind(this)} />
             </div>
         );
     }

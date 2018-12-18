@@ -19,7 +19,7 @@ import * as Icons from '@material-ui/icons';
 import moment from 'moment';
 
 // actions
-import { remoteUpdateCardStoreField } from "../actions/cardStore";
+import { remoteUpdateCardStoreField, remoteDeleteCardStore } from "../actions/cardStore";
 
 import JCardRules from './JCardRules';
 import JDialogMedia from './JDialogMedia';
@@ -212,7 +212,7 @@ class JCardStore extends React.Component {
     }
 
     renderFooter() {
-        const { classes } = this.props;
+        const { classes, id } = this.props;
 
         return (
             <CardActions>
@@ -233,6 +233,7 @@ class JCardStore extends React.Component {
                             className={classes.cardActionRight}
                             variant='outlined'
                             size='small'
+                            onClick={() => this.props.onRemoteDelete(id)}
                             color='secondary'>
                             <Icons.Delete />
                             удалить
@@ -273,7 +274,7 @@ class JCardStore extends React.Component {
                 <Grid container>
                     <Grid item xs={12}>
                         <Button
-                            onClick={() => this.props.onSelect(id)}
+                            onClick={() => this.props.onSelect({ user_id: this.props.userSelected, card_store_id: id })}
                             className={classes.cardActionLeft}
                             variant='outlined'
                             size='small'
@@ -335,9 +336,12 @@ class JCardStore extends React.Component {
 
 JCardStore = withStyles(styles, { withTheme: true })(JCardStore);
 export default connect(
-    null,
+    state => ({
+        userSelected: state.user.selected.id,
+    }),
     dispatch => ({
         onRemoteUpdateField: (id, field, value) => dispatch(remoteUpdateCardStoreField(id, field, value)),
+        onRemoteDelete: id => dispatch(remoteDeleteCardStore(id)),
         // onRemoteSync: (id) => dispatch(remoteSyncCardStore(id)),
     })
 )(JCardStore);

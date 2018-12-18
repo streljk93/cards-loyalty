@@ -9,6 +9,7 @@ import {
     remoteSaveUser,
 } from "../actions/user";
 import { openDrawerEditor, closeDrawerEditor } from "../actions/ui";
+import { remoteCreateCardUser } from "../actions/cardUser";
 
 // own components
 import JScreenUsers from '../screen/JScreenUsers';
@@ -21,6 +22,7 @@ export default connect(
         users: state.user.data,
     }),
     dispatch => ({
+        onRemoteCreateCardUser: (data) => dispatch(remoteCreateCardUser(data)),
         onClearUserEditing: () => dispatch(clearUserEditing()),
         onChangeUserEditingField: (name, value) => dispatch(changeUserEditingField(name, value)),
         onRemoteFetchUserList: () => dispatch(remoteFetchUserList()),

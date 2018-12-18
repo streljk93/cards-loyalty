@@ -14,7 +14,7 @@ import { remoteDeleteUser, selectUserEditing, selectUser } from "../actions/user
 import { openDrawerEditor, openAlert, openDialogCardStore } from "../actions/ui";
 
 // own components
-import JCardsUser from '../components/JCardsUser';
+import JCardsUser from './JCardsUser';
 import JUserSummary from '../components/JUserSummary';
 import JUserInfo from '../components/JUserInfo';
 import JUserActions from '../components/JUserActions';
@@ -71,7 +71,7 @@ class JUser extends React.Component {
                 />
 
                 <ExpansionPanelDetails style={{ padding: 24 }}>
-                    <JCardsUser />
+                    <JCardsUser userId={id} />
                 </ExpansionPanelDetails>
             </ExpansionPanel>
         );

@@ -53,6 +53,13 @@ function updateCardStore (data) {
     };
 }
 
+function deleteCardStore (id) {
+    return {
+        type: 'DELETE_CARD_STORE',
+        payload: id,
+    };
+}
+
 export function updateCardStoreField (id, field, value) {
     return {
         type: 'UPDATE_CARD_STORE',
@@ -146,6 +153,44 @@ export function remoteFetchCardStoreList () {
                 dispatch(responseCardStore());
                 dispatch(stopCommonLoader());
             });
+
+    };
+}
+
+export function remoteDeleteCardStore (id) {
+    return (dispatch, getState) => {
+
+        const { account: { token }} = getState();
+        dispatch(requestCardStore());
+        dispatch(startCommonLoader());
+
+        // TODO: сделать заранее удаление
+
+        return fetch(`${config.api}/loyality/card-store/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': token },
+        }).then(response => response.json()).then(data => {
+            if (data.success) dispatch(deleteCardStore(id));
+            else data.errors.forEach(error => dispatch(addError('Удаление магазинной карты', error)));
+
+            // TODO: сделать такой вывод ошибок с восстановление операции которая завершилась неудачно!
+            // addError('title', 'content', {
+            //    component: this,
+            //    action: 'remoteDeleteCardStore',
+            //    params: [id],
+            // });
+
+            dispatch(responseCardStore());
+            dispatch(stopCommonLoader());
+
+            return data.success;
+        }).catch(error => {
+            dispatch(addError('Удаление магазинной карты', error.message));
+            dispatch(responseCardStore());
+            dispatch(stopCommonLoader());
+
+            return false;
+        });
 
     };
 }

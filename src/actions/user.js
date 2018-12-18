@@ -57,13 +57,19 @@ export function remoteFetchUserList () {
                 'Authorization': token,
             },
         }).then(response => response.json()).then(data => {
-            dispatch(fetchUserList(data.info));
+            if (data.success) dispatch(fetchUserList(data.info));
+            else data.errors.forEach(error => dispatch(addError('Получение пользователей', error)));
+
             dispatch(responseUser());
             dispatch(stopCommonLoader());
+
+            return data;
         }).catch(error => {
             dispatch(addError('Получение пользователей', error.message));
             dispatch(responseUser());
             dispatch(stopCommonLoader());
+
+            return error;
         });
 
     }

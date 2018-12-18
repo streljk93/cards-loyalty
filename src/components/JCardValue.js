@@ -10,15 +10,15 @@ import styles from '../styles/JCardValueStyles';
 class JCardValue extends React.Component {
 
     render() {
-        const { classes, unit, icon, value, href } = this.props;
+        const { classes, unit, icon, value, href, isactive } = this.props;
         const Icon = Icons[icon];
 
         return (
             <Link to={href}>
                 <div className={classes.container}>
                     <Tooltip title={unit} placement='bottom-start'>
-                        <Typography className={classes.textWrap}>
-                            <Icon color='primary' className={classes.icon} /> {value}
+                        <Typography className={isactive ? classes.textWrap : classes.textWrapDisabled}>
+                            <Icon color={isactive ? 'primary' : 'disabled'} className={classes.icon} /> {value}
                         </Typography>
                     </Tooltip>
                 </div>

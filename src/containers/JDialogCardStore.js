@@ -62,7 +62,10 @@ class JDialogCardStore extends React.Component {
                                                 key={i}
                                                 {...this.addTypeInfo(card)}
                                                 rules={this.props.rules.filter(rule => rule.card_store_id === card.id)}
-                                                onSelect={this.props.onSelect}
+                                                onSelect={data => {
+                                                    this.props.onSelect(data);
+                                                    this.props.onCloseDialogCardStore();
+                                                }}
                                                 hasSelect
                                             />
                                     )}
